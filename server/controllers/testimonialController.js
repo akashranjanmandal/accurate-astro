@@ -1,3 +1,4 @@
+// server/controllers/testimonials.js
 const { supabase, supabaseAdmin } = require('../config/database')
 
 const createTestimonial = async (req, res) => {
@@ -9,24 +10,27 @@ const createTestimonial = async (req, res) => {
       rating, 
       location,
       is_featured,
-      display_order 
+      display_order,
+      status 
     } = req.body
 
     // Validate required fields
-    if (!name || !youtube_url) {
+    if (!name || !description) {
       return res.status(400).json({ 
         success: false, 
-        message: 'Name and YouTube URL are required' 
+        message: 'Name and description are required' 
       })
     }
 
-    // Validate YouTube URL format
-    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/
-    if (!youtubeRegex.test(youtube_url)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Please enter a valid YouTube URL' 
-      })
+    // Validate YouTube URL if provided
+    if (youtube_url && youtube_url.trim() !== '') {
+      const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/
+      if (!youtubeRegex.test(youtube_url)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: 'Please enter a valid YouTube URL' 
+        })
+      }
     }
 
     // Validate rating if provided
@@ -37,14 +41,28 @@ const createTestimonial = async (req, res) => {
       })
     }
 
+    // Validate status if provided
+    const validStatuses = ['active', 'inactive', 'pending']
+    if (status && !validStatuses.includes(status)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid status value' 
+      })
+    }
+
     const testimonialData = {
       name,
-      youtube_url,
       description: description || null,
       rating: rating || 5,
       location: location || null,
       is_featured: is_featured || false,
-      display_order: display_order || 0
+      display_order: display_order || 0,
+      status: status || 'active'
+    }
+
+    // Only include youtube_url if provided
+    if (youtube_url && youtube_url.trim() !== '') {
+      testimonialData.youtube_url = youtube_url
     }
 
     const { data: testimonial, error } = await supabaseAdmin
@@ -76,14 +94,14 @@ const createTestimonial = async (req, res) => {
   }
 }
 
-// In your testimonial controller
 const getTestimonials = async (req, res) => {
   try {
     const { 
       featured, 
       page = 1, 
       limit = 10, 
-      search 
+      search,
+      status 
     } = req.query
     const offset = (page - 1) * limit
 
@@ -97,8 +115,17 @@ const getTestimonials = async (req, res) => {
       query = query.eq('is_featured', featured === 'true')
     }
 
+    if (status) {
+      query = query.eq('status', status)
+    }
+
     if (search) {
       query = query.or(`name.ilike.%${search}%,description.ilike.%${search}%,location.ilike.%${search}%`)
+    }
+
+    // Only show active testimonials for public by default
+    if (!req.user || req.user.role !== 'admin') {
+      query = query.eq('status', 'active')
     }
 
     // Apply pagination
@@ -117,9 +144,16 @@ const getTestimonials = async (req, res) => {
       })
     }
 
+    // Add hasVideo field to each testimonial
+    const testimonialsWithVideoFlag = testimonials.map(testimonial => ({
+      ...testimonial,
+      hasVideo: !!testimonial.youtube_url,
+      hasText: !!testimonial.description && testimonial.description.trim().length > 0
+    }))
+
     res.json({
       success: true,
-      testimonials: testimonials || [],
+      testimonials: testimonialsWithVideoFlag || [],
       pagination: {
         page: parseInt(page),
         limit: parseInt(limit),
@@ -145,6 +179,7 @@ const getFeaturedTestimonials = async (req, res) => {
       .from('testimonials')
       .select('*')
       .eq('is_featured', true)
+      .eq('status', 'active')
       .order('display_order', { ascending: true })
       .order('created_at', { ascending: false })
       .limit(parseInt(limit))
@@ -157,9 +192,16 @@ const getFeaturedTestimonials = async (req, res) => {
       })
     }
 
+    // Add hasVideo field to each testimonial
+    const testimonialsWithVideoFlag = testimonials.map(testimonial => ({
+      ...testimonial,
+      hasVideo: !!testimonial.youtube_url,
+      hasText: !!testimonial.description && testimonial.description.trim().length > 0
+    }))
+
     res.json({
       success: true,
-      testimonials: testimonials || []
+      testimonials: testimonialsWithVideoFlag || []
     })
 
   } catch (error) {
@@ -188,6 +230,10 @@ const getTestimonialById = async (req, res) => {
       })
     }
 
+    // Add hasVideo field
+    testimonial.hasVideo = !!testimonial.youtube_url
+    testimonial.hasText = !!testimonial.description && testimonial.description.trim().length > 0
+
     res.json({
       success: true,
       testimonial
@@ -202,7 +248,6 @@ const getTestimonialById = async (req, res) => {
   }
 }
 
-// In your testimonial controller, update the updateTestimonial function
 const updateTestimonial = async (req, res) => {
   try {
     const { id } = req.params
@@ -222,6 +267,23 @@ const updateTestimonial = async (req, res) => {
       return res.status(404).json({ 
         success: false, 
         message: 'Testimonial not found' 
+      })
+    }
+
+    // Validate rating if provided
+    if (updateData.rating && (updateData.rating < 1 || updateData.rating > 5)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Rating must be between 1 and 5' 
+      })
+    }
+
+    // Validate status if provided
+    const validStatuses = ['active', 'inactive', 'pending']
+    if (updateData.status && !validStatuses.includes(updateData.status)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid status value' 
       })
     }
 
@@ -255,6 +317,7 @@ const updateTestimonial = async (req, res) => {
     })
   }
 }
+
 const deleteTestimonial = async (req, res) => {
   try {
     const { id } = req.params

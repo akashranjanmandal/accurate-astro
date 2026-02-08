@@ -1,14 +1,15 @@
+// server/controllers/demoBookings.js
 const { supabase, supabaseAdmin } = require('../config/database')
 
 const createDemoBooking = async (req, res) => {
   try {
-    const { name, phone, email, date, time } = req.body
+    const { name, phone, email, date, time, dob, gender } = req.body
 
     // Validate required fields
-    if (!name || !phone || !date || !time) {
+    if (!name || !phone || !date || !time || !dob || !gender) {
       return res.status(400).json({ 
         success: false, 
-        message: 'Name, phone, date, and time are required' 
+        message: 'All fields are required' 
       })
     }
 
@@ -32,15 +33,61 @@ const createDemoBooking = async (req, res) => {
       }
     }
 
-    // Validate date is not in the past
-    const selectedDate = new Date(date)
+    // Validate gender
+    const validGenders = ['male', 'female', 'other', 'prefer_not_to_say']
+    if (!validGenders.includes(gender)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid gender selection' 
+      })
+    }
+
+    // Validate date of birth (must be at least 18 years old)
+    const dobDate = new Date(dob)
     const today = new Date()
-    today.setHours(0, 0, 0, 0)
+    let age = today.getFullYear() - dobDate.getFullYear()
+    const monthDiff = today.getMonth() - dobDate.getMonth()
     
-    if (selectedDate < today) {
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
+      age--
+    }
+    
+    if (age < 18) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'You must be at least 18 years old' 
+      })
+    }
+
+    // Validate date of birth range (100 years max)
+    const minDate = new Date()
+    minDate.setFullYear(minDate.getFullYear() - 100)
+    
+    if (dobDate < minDate || dobDate > today) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid date of birth' 
+      })
+    }
+
+    // Validate demo date is not in the past
+    const demoDate = new Date(date)
+    const todayDate = new Date()
+    todayDate.setHours(0, 0, 0, 0)
+    
+    if (demoDate < todayDate) {
       return res.status(400).json({ 
         success: false, 
         message: 'Cannot book demo for past dates' 
+      })
+    }
+
+    // Validate time format
+    const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/
+    if (!timeRegex.test(time)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid time format. Use HH:MM format.' 
       })
     }
 
@@ -50,7 +97,7 @@ const createDemoBooking = async (req, res) => {
       .select('id')
       .eq('date', date)
       .eq('time', time)
-      .eq('status', 'submitted')
+      .in('status', ['submitted', 'meeting_due'])
       .single()
 
     if (existingBooking) {
@@ -67,6 +114,8 @@ const createDemoBooking = async (req, res) => {
       email: email || null,
       date,
       time,
+      dob,
+      gender,
       status: 'submitted'
     }
 
@@ -197,7 +246,7 @@ const updateDemoBookingStatus = async (req, res) => {
     const { id } = req.params
     const { status, notes } = req.body
 
-    if (!status || !['submitted', 'meeting_due', 'completed'].includes(status)) {
+    if (!status || !['submitted', 'meeting_due', 'completed', 'cancelled'].includes(status)) {
       return res.status(400).json({ 
         success: false, 
         message: 'Valid status is required' 

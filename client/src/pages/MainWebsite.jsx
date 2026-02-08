@@ -1,8 +1,10 @@
+// MainWebsite.jsx (updated)
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FaStar, FaPlay, FaCalendarAlt, FaPhoneAlt, FaEnvelope, FaUser, FaClock, FaMapMarkerAlt, FaVenusMars, FaRocket, FaQuoteLeft, FaArrowRight } from 'react-icons/fa'
 import Header from '../components/Header'
 import Hero from '../components/Hero'
+import AboutUs from '../components/AboutUs' // Add this import
 import Testimonials from '../components/Testimonials'
 import DemoBooking from '../components/DemoBooking'
 import Consultation from '../components/Consultation'
@@ -23,41 +25,37 @@ const MainWebsite = () => {
   }, [])
 
   const fetchTestimonials = async () => {
-  try {
-    console.log('📡 Fetching testimonials...')
-    
-    const response = await api.get('/testimonials', {
-      params: {
-        limit: 20,  // Increase limit to ensure we get all
-        page: 1
-      }
-    })
-    
-    console.log('✅ API Response Full:', {
-      success: response.data.success,
-      testimonialsCount: response.data.testimonials?.length,
-      totalInPagination: response.data.pagination?.total,
-      allTestimonialIds: response.data.testimonials?.map(t => ({
-        id: t.id,
-        name: t.name,
-        hasVideo: !!(t.video_id || t.youtube_url)
-      }))
-    })
-    
-    // Log the raw response data
-    console.log('📊 Raw testimonials data:', JSON.stringify(response.data.testimonials, null, 2))
-    
-    if (response.data.success) {
-      setTestimonials(response.data.testimonials || [])
+    try {
+      console.log('📡 Fetching testimonials...')
+      const response = await api.get('/testimonials', {
+        params: {
+          limit: 20,
+          page: 1
+        }
+      })
       
-      // Also log what we're setting in state
-      console.log('🎯 Setting state with:', response.data.testimonials?.length || 0, 'testimonials')
+      console.log('✅ API Response Full:', {
+        success: response.data.success,
+        testimonialsCount: response.data.testimonials?.length,
+        totalInPagination: response.data.pagination?.total,
+        allTestimonialIds: response.data.testimonials?.map(t => ({
+          id: t.id,
+          name: t.name,
+          hasVideo: !!(t.video_id || t.youtube_url)
+        }))
+      })
+      
+      console.log('📊 Raw testimonials data:', JSON.stringify(response.data.testimonials, null, 2))
+      
+      if (response.data.success) {
+        setTestimonials(response.data.testimonials || [])
+        console.log('🎯 Setting state with:', response.data.testimonials?.length || 0, 'testimonials')
+      }
+      
+    } catch (error) {
+      console.error('❌ Error fetching testimonials:', error)
     }
-    
-  } catch (error) {
-    console.error('❌ Error fetching testimonials:', error)
   }
-}
 
   const fetchBlogs = async () => {
     try {
@@ -103,6 +101,7 @@ const MainWebsite = () => {
       <div className="relative z-10">
         <Header />
         <Hero />
+        <AboutUs /> {/* Add AboutUs component here */}
         
         {/* Show loading state */}
         {loading && (

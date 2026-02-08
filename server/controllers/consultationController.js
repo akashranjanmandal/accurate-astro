@@ -1,7 +1,7 @@
+// server/controllers/consultations.js
 const Razorpay = require('razorpay')
 const crypto = require('crypto')
 const { supabase, supabaseAdmin } = require('../config/database')
-const { v4: uuidv4 } = require('uuid')
 
 // Initialize Razorpay
 const razorpay = new Razorpay({
@@ -11,13 +11,68 @@ const razorpay = new Razorpay({
 
 const createConsultation = async (req, res) => {
   try {
-    const { name, email, phone } = req.body
+    const { name, email, phone, dob, gender } = req.body
 
-    // Validate input
-    if (!name || !email || !phone) {
+    // Validate required fields
+    if (!name || !email || !phone || !dob || !gender) {
       return res.status(400).json({ 
         success: false, 
-        message: 'Name, email, and phone are required' 
+        message: 'All fields are required' 
+      })
+    }
+
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid email format' 
+      })
+    }
+
+    // Validate phone number format
+    const phoneRegex = /^[0-9]{10}$/
+    if (!phoneRegex.test(phone)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Phone number must be 10 digits' 
+      })
+    }
+
+    // Validate gender
+    const validGenders = ['male', 'female', 'other', 'prefer_not_to_say']
+    if (!validGenders.includes(gender)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid gender selection' 
+      })
+    }
+
+    // Validate date of birth (must be at least 18 years old)
+    const dobDate = new Date(dob)
+    const today = new Date()
+    let age = today.getFullYear() - dobDate.getFullYear()
+    const monthDiff = today.getMonth() - dobDate.getMonth()
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
+      age--
+    }
+    
+    if (age < 18) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'You must be at least 18 years old' 
+      })
+    }
+
+    // Validate date of birth range (100 years max)
+    const minDate = new Date()
+    minDate.setFullYear(minDate.getFullYear() - 100)
+    
+    if (dobDate < minDate || dobDate > today) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid date of birth' 
       })
     }
 
@@ -38,6 +93,8 @@ const createConsultation = async (req, res) => {
       name,
       email,
       phone,
+      dob,
+      gender,
       amount: 600,
       razorpay_order_id: razorpayOrder.id,
       status: 'payment_pending'
@@ -225,7 +282,7 @@ const updateConsultationStatus = async (req, res) => {
     const { id } = req.params
     const { status, notes } = req.body
 
-    if (!status || !['received', 'on_the_call', 'completed'].includes(status)) {
+    if (!status || !['payment_pending', 'received', 'on_the_call', 'completed', 'cancelled'].includes(status)) {
       return res.status(400).json({ 
         success: false, 
         message: 'Valid status is required' 

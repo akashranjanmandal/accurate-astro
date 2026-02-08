@@ -97,7 +97,7 @@ useEffect(() => {
     localStorage.removeItem('adminToken')
     localStorage.removeItem('adminUser')
     toast.success('Logged out successfully')
-    navigate('/login')
+    navigate('admin/login')
   }
 
   // Fetch dashboard data
@@ -1440,6 +1440,7 @@ const ConsultationsTable = ({ data, loading, onRefresh, onUpdateStatus, onDelete
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Contact</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Amount</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Status</th>
+                <th className="text-left py-3 px-2 lg:px-4 text-sm">Date of Birth & Gender</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Date</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Actions</th>
               </tr>
@@ -1468,6 +1469,14 @@ const ConsultationsTable = ({ data, loading, onRefresh, onUpdateStatus, onDelete
                       <option value="cancelled">Cancelled</option>
                     </select>
                   </td>
+                  <td className="py-3 px-2 lg:px-4">
+  <div>
+    <p className="text-xs text-gray-500">
+      {consultation.dob ? new Date(consultation.dob).toLocaleDateString() : 'N/A'} • 
+      {consultation.gender ? ` ${consultation.gender.charAt(0).toUpperCase() + consultation.gender.slice(1)}` : ''}
+    </p>
+  </div>
+</td>
                   <td className="py-3 px-2 lg:px-4 text-gray-500 text-sm">
                     {new Date(consultation.created_at).toLocaleDateString()}
                   </td>
@@ -1515,6 +1524,7 @@ const DemoBookingsTable = ({ data, loading, onUpdateStatus, onDelete }) => {
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Name</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Contact</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Date & Time</th>
+                <th className="text-left py-3 px-2 lg:px-4 text-sm">Date of Birth & Gender</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Status</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Actions</th>
               </tr>
@@ -1533,6 +1543,14 @@ const DemoBookingsTable = ({ data, loading, onUpdateStatus, onDelete }) => {
                     {booking.date ? new Date(booking.date).toLocaleDateString() : 'N/A'} 
                     {booking.time && ` at ${booking.time}`}
                   </td>
+                  <td className="py-3 px-2 lg:px-4 text-sm">
+  <div>
+    <p className="text-xs text-gray-500">
+      {booking.dob ? new Date(booking.dob).toLocaleDateString() : 'N/A'} • 
+      {booking.gender ? ` ${booking.gender.charAt(0).toUpperCase() + booking.gender.slice(1)}` : ''}
+    </p>
+  </div>
+</td>
                   <td className="py-3 px-2 lg:px-4">
                     <select 
                       value={booking.status || 'submitted'}

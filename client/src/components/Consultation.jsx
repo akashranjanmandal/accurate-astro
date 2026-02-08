@@ -1,8 +1,9 @@
+// components/Consultation.jsx
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
-import { FaUser, FaPhoneAlt, FaEnvelope, FaCreditCard, FaLock, FaShieldAlt } from 'react-icons/fa'
+import { FaUser, FaPhoneAlt, FaEnvelope, FaCreditCard, FaLock, FaShieldAlt, FaCalendar, FaVenusMars } from 'react-icons/fa'
 import api from '../utils/api'
 
 const Consultation = () => {
@@ -88,6 +89,20 @@ const Consultation = () => {
     }
   }
 
+  // Get max date (18 years ago for minimum age)
+  const getMaxDate = () => {
+    const today = new Date()
+    const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate())
+    return maxDate.toISOString().split('T')[0]
+  }
+
+  // Get min date (100 years ago)
+  const getMinDate = () => {
+    const today = new Date()
+    const minDate = new Date(today.getFullYear() - 100, today.getMonth(), today.getDate())
+    return minDate.toISOString().split('T')[0]
+  }
+
   return (
     <section id="consultation" className="section-padding bg-gradient-to-b from-white to-purple-50">
       <div className="container-custom">
@@ -161,7 +176,7 @@ const Consultation = () => {
                   {/* Name */}
                   <div>
                     <label className="form-label">
-                      <FaUser className="inline mr-2" /> Full Name
+                      <FaUser className="inline mr-2" /> Full Name *
                     </label>
                     <input
                       type="text"
@@ -177,7 +192,7 @@ const Consultation = () => {
                   {/* Email */}
                   <div>
                     <label className="form-label">
-                      <FaEnvelope className="inline mr-2" /> Email Address
+                      <FaEnvelope className="inline mr-2" /> Email Address *
                     </label>
                     <input
                       type="email"
@@ -199,7 +214,7 @@ const Consultation = () => {
                   {/* Phone */}
                   <div>
                     <label className="form-label">
-                      <FaPhoneAlt className="inline mr-2" /> Phone Number
+                      <FaPhoneAlt className="inline mr-2" /> Phone Number *
                     </label>
                     <input
                       type="tel"
@@ -215,6 +230,67 @@ const Consultation = () => {
                     />
                     {errors.phone && (
                       <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                    )}
+                  </div>
+
+                  {/* Date of Birth */}
+                  <div>
+                    <label className="form-label">
+                      <FaCalendar className="inline mr-2" /> Date of Birth *
+                    </label>
+                    <input
+                      type="date"
+                      {...register('dob', { 
+                        required: 'Date of birth is required',
+                        validate: {
+                          minAge: (value) => {
+                            const dob = new Date(value)
+                            const today = new Date()
+                            const age = today.getFullYear() - dob.getFullYear()
+                            const monthDiff = today.getMonth() - dob.getMonth()
+                            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                              return age - 1 >= 18 || 'You must be at least 18 years old'
+                            }
+                            return age >= 18 || 'You must be at least 18 years old'
+                          },
+                          validDate: (value) => {
+                            const dob = new Date(value)
+                            const minDate = new Date(getMinDate())
+                            const maxDate = new Date(getMaxDate())
+                            return (dob >= minDate && dob <= maxDate) || 'Please enter a valid date of birth'
+                          }
+                        }
+                      })}
+                      className="form-input"
+                      min={getMinDate()}
+                      max={getMaxDate()}
+                    />
+                    {errors.dob && (
+                      <p className="text-red-500 text-sm mt-1">{errors.dob.message}</p>
+                    )}
+                    <p className="text-xs text-gray-500 mt-1">
+                      You must be at least 18 years old
+                    </p>
+                  </div>
+
+                  {/* Gender */}
+                  <div>
+                    <label className="form-label">
+                      <FaVenusMars className="inline mr-2" /> Gender *
+                    </label>
+                    <select
+                      {...register('gender', { required: 'Gender is required' })}
+                      className="form-input"
+                      defaultValue=""
+                    >
+                      <option value="" disabled>Select your gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                      <option value="prefer_not_to_say">Prefer not to say</option>
+                    </select>
+                    {errors.gender && (
+                      <p className="text-red-500 text-sm mt-1">{errors.gender.message}</p>
                     )}
                   </div>
 

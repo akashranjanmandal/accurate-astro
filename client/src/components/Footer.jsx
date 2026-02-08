@@ -1,3 +1,4 @@
+// components/Footer.jsx
 import React from 'react'
 import { motion } from 'framer-motion'
 import { 
@@ -8,37 +9,67 @@ import {
 const Footer = () => {
   const currentYear = new Date().getFullYear()
 
+  const socialLinks = [
+    { icon: <FaFacebook />, href: '#', label: 'Facebook' },
+    { icon: <FaTwitter />, href: '#', label: 'Twitter' },
+    { icon: <FaInstagram />, href: '#', label: 'Instagram' },
+    { icon: <FaYoutube />, href: '#', label: 'YouTube' },
+    { icon: <FaLinkedin />, href: '#', label: 'LinkedIn' },
+  ]
+
   return (
     <footer className="bg-gradient-to-b from-astro-dark to-gray-900 text-white pt-16 pb-8">
       <div className="container-custom">
         <div className="grid md:grid-cols-4 gap-8 mb-12">
-          {/* Company Info */}
+          {/* Company Info with Logo */}
           <div>
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center">
-                <FaStar className="text-xl" />
+              {/* Logo Image */}
+              <div className="relative">
+                <img 
+                  src="/images/logo.png" 
+                  alt="Accurate Astro Logo" 
+                  className="w28 h-28 object-cover rounded-full"
+                  onError={(e) => {
+                    console.error('Footer logo failed to load')
+                    e.target.src = 'https://via.placeholder.com/56x56?text=AA'
+                  }}
+                />
               </div>
-              <div>
-                <h3 className="text-2xl font-bold">Accurate Astro</h3>
-                <p className="text-sm text-purple-300">Divine Guidance, Modern Science</p>
-              </div>
+              
             </div>
+            
             <p className="text-gray-400 mb-6">
               Bringing ancient Vedic wisdom to the modern world with accurate predictions 
               and personalized guidance for life's journey.
             </p>
+            
+            {/* Social Media Links */}
+            <div className="flex space-x-4">
+              {socialLinks.map((social, index) => (
+                <a
+                  key={index}
+                  href={social.href}
+                  aria-label={social.label}
+                  className="w-10 h-10 bg-gray-800 hover:bg-purple-600 rounded-full flex items-center justify-center transition-colors"
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Quick Links */}
           <div>
             <h4 className="text-xl font-bold mb-6">Quick Links</h4>
             <ul className="space-y-3">
-              {['Home', 'Testimonials', 'Book Demo', 'Consultation', 'Blogs', 'Get Kundli'].map((item) => (
+              {['Home', 'About', 'Testimonials', 'Book Demo', 'Consultation', 'Blogs', 'Get Kundli'].map((item) => (
                 <li key={item}>
                   <a 
                     href={`#${item.toLowerCase().replace(' ', '-')}`}
-                    className="text-gray-400 hover:text-white transition-colors"
+                    className="text-gray-400 hover:text-white transition-colors flex items-center group"
                   >
+                    <span className="w-2 h-2 bg-purple-600 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
                     {item}
                   </a>
                 </li>
@@ -58,7 +89,8 @@ const Footer = () => {
                 'Gemstone Recommendation',
                 'Vastu Consultation'
               ].map((service) => (
-                <li key={service} className="text-gray-400">
+                <li key={service} className="text-gray-400 flex items-center">
+                  <FaStar className="text-purple-500 text-xs mr-3" />
                   {service}
                 </li>
               ))}
@@ -70,21 +102,29 @@ const Footer = () => {
             <h4 className="text-xl font-bold mb-6">Contact Us</h4>
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
-                <FaPhone className="text-purple-400 mt-1" />
+                <div className="w-10 h-10 bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                  <FaPhone className="text-purple-400" />
+                </div>
                 <div>
                   <p className="font-semibold">Phone Number</p>
                   <p className="text-gray-400">+91 98765 43210</p>
                 </div>
               </div>
+              
               <div className="flex items-start space-x-3">
-                <FaEnvelope className="text-purple-400 mt-1" />
+                <div className="w-10 h-10 bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                  <FaEnvelope className="text-purple-400" />
+                </div>
                 <div>
                   <p className="font-semibold">Email Address</p>
                   <p className="text-gray-400">contact@accurateastro.com</p>
                 </div>
               </div>
+              
               <div className="flex items-start space-x-3">
-                <FaMapMarkerAlt className="text-purple-400 mt-1" />
+                <div className="w-10 h-10 bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                  <FaMapMarkerAlt className="text-purple-400" />
+                </div>
                 <div>
                   <p className="font-semibold">Office Address</p>
                   <p className="text-gray-400">Astro Tower, Sector 45, Noida, UP 201301</p>
@@ -103,6 +143,17 @@ const Footer = () => {
             © {currentYear} Accurate Astro. All rights reserved.
           </div>
           
+          <div className="flex items-center space-x-6">
+            <a href="/privacy" className="text-gray-400 hover:text-white text-sm">
+              Privacy Policy
+            </a>
+            <a href="/terms" className="text-gray-400 hover:text-white text-sm">
+              Terms of Service
+            </a>
+            <a href="/refund" className="text-gray-400 hover:text-white text-sm">
+              Refund Policy
+            </a>
+          </div>
         </div>
 
         {/* Developer Credit */}

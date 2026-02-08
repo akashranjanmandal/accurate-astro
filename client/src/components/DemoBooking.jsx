@@ -1,8 +1,9 @@
+// components/DemoBooking.jsx
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
-import { FaCalendarAlt, FaClock, FaUser, FaPhoneAlt, FaEnvelope, FaCheck } from 'react-icons/fa'
+import { FaCalendarAlt, FaClock, FaUser, FaPhoneAlt, FaEnvelope, FaCheck, FaVenusMars } from 'react-icons/fa'
 import api from '../utils/api'
 
 const DemoBooking = () => {
@@ -50,6 +51,20 @@ const DemoBooking = () => {
       dates.push(date.toISOString().split('T')[0])
     }
     return dates
+  }
+
+  // Get max date for DOB (18 years ago for minimum age)
+  const getMaxDOBDate = () => {
+    const today = new Date()
+    const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate())
+    return maxDate.toISOString().split('T')[0]
+  }
+
+  // Get min date for DOB (100 years ago)
+  const getMinDOBDate = () => {
+    const today = new Date()
+    const minDate = new Date(today.getFullYear() - 100, today.getMonth(), today.getDate())
+    return minDate.toISOString().split('T')[0]
   }
 
   const handleDateSelect = (date) => {
@@ -131,7 +146,7 @@ const DemoBooking = () => {
               {/* Name */}
               <div>
                 <label className="form-label">
-                  <FaUser className="inline mr-2" /> Full Name
+                  <FaUser className="inline mr-2" /> Full Name *
                 </label>
                 <input
                   type="text"
@@ -147,7 +162,7 @@ const DemoBooking = () => {
               {/* Phone */}
               <div>
                 <label className="form-label">
-                  <FaPhoneAlt className="inline mr-2" /> Phone Number
+                  <FaPhoneAlt className="inline mr-2" /> Phone Number *
                 </label>
                 <input
                   type="tel"
@@ -169,7 +184,7 @@ const DemoBooking = () => {
               {/* Email */}
               <div>
                 <label className="form-label">
-                  <FaEnvelope className="inline mr-2" /> Email Address
+                  <FaEnvelope className="inline mr-2" /> Email Address *
                 </label>
                 <input
                   type="email"
@@ -188,10 +203,71 @@ const DemoBooking = () => {
                 )}
               </div>
 
-              {/* Date Selection */}
+              {/* Date of Birth */}
               <div>
                 <label className="form-label">
-                  <FaCalendarAlt className="inline mr-2" /> Select Date
+                  <FaCalendarAlt className="inline mr-2" /> Date of Birth *
+                </label>
+                <input
+                  type="date"
+                  {...register('dob', { 
+                    required: 'Date of birth is required',
+                    validate: {
+                      minAge: (value) => {
+                        const dob = new Date(value)
+                        const today = new Date()
+                        const age = today.getFullYear() - dob.getFullYear()
+                        const monthDiff = today.getMonth() - dob.getMonth()
+                        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                          return age - 1 >= 18 || 'You must be at least 18 years old'
+                        }
+                        return age >= 18 || 'You must be at least 18 years old'
+                      },
+                      validDate: (value) => {
+                        const dob = new Date(value)
+                        const minDate = new Date(getMinDOBDate())
+                        const maxDate = new Date(getMaxDOBDate())
+                        return (dob >= minDate && dob <= maxDate) || 'Please enter a valid date of birth'
+                      }
+                    }
+                  })}
+                  className="form-input"
+                  min={getMinDOBDate()}
+                  max={getMaxDOBDate()}
+                />
+                {errors.dob && (
+                  <p className="text-red-500 text-sm mt-1">{errors.dob.message}</p>
+                )}
+                <p className="text-xs text-gray-500 mt-1">
+                  You must be at least 18 years old
+                </p>
+              </div>
+
+              {/* Gender */}
+              <div>
+                <label className="form-label">
+                  <FaVenusMars className="inline mr-2" /> Gender *
+                </label>
+                <select
+                  {...register('gender', { required: 'Gender is required' })}
+                  className="form-input"
+                  defaultValue=""
+                >
+                  <option value="" disabled>Select your gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                  <option value="prefer_not_to_say">Prefer not to say</option>
+                </select>
+                {errors.gender && (
+                  <p className="text-red-500 text-sm mt-1">{errors.gender.message}</p>
+                )}
+              </div>
+
+              {/* Demo Date Selection */}
+              <div>
+                <label className="form-label">
+                  <FaCalendarAlt className="inline mr-2" /> Select Demo Date *
                 </label>
                 <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
                   {getNextDays().map((date) => {
@@ -226,10 +302,10 @@ const DemoBooking = () => {
                 )}
               </div>
 
-              {/* Time Selection - FIXED */}
+              {/* Time Selection */}
               <div>
                 <label className="form-label">
-                  <FaClock className="inline mr-2" /> Select Time Slot
+                  <FaClock className="inline mr-2" /> Select Time Slot *
                 </label>
                 <div className="grid grid-cols-4 gap-2">
                   {timeSlots.map((time) => (
