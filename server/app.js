@@ -20,19 +20,25 @@ const app = express();
 app.use(
   cors({
     origin: (origin, callback) => {
-      // allow server-to-server / Postman
+      // allow server-to-server, Postman, health checks
       if (!origin) return callback(null, true);
 
-      // Allow localhost
-      if (origin === "http://localhost:5173") {
-        return callback(null, true);
-      }
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "https://accurateastro.in",
+        "https://www.accurateastro.in",
+      ];
 
-      // Allow ALL Vercel deployments (prod + preview)
+      // allow Vercel preview + prod domains
       if (origin.endsWith(".vercel.app")) {
         return callback(null, true);
       }
 
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      console.error("❌ Blocked by CORS:", origin);
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
