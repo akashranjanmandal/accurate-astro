@@ -1,95 +1,139 @@
-const express = require('express')
-const cors = require('cors')
-const session = require('express-session')
-require('dotenv').config()
-
-
-// Import routes (you'll need to create these)
-const adminRoutes = require('./routes/admin')
-const consultationRoutes = require('./routes/consultations')
-const demoBookingRoutes = require('./routes/demoBookings')
-const kundliRoutes = require('./routes/kundli')
-const blogRoutes = require('./routes/blogs')
-const testimonialRoutes = require('./routes/testimonials')
-const uploadRoutes = require('./routes/upload')
-const app = express()
-
-// Middleware
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
-  credentials: true
-}))
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-
-// Session configuration (simplified for now)
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { 
-    secure: false, // Set to true in production with HTTPS
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
-  }
-}))
+const express = require("express");
+const cors = require("cors");
+const session = require("express-session");
+require("dotenv").config();
 
 // Routes
-app.use('/api/upload', uploadRoutes)
-app.use('/api/admin', adminRoutes)
-app.use('/api/consultations', consultationRoutes)
-app.use('/api/demo-bookings', demoBookingRoutes)
-app.use('/api/kundli', kundliRoutes)
-app.use('/api/blogs', blogRoutes)
-app.use('/api/testimonials', testimonialRoutes)
+const adminRoutes = require("./routes/admin");
+const consultationRoutes = require("./routes/consultations");
+const demoBookingRoutes = require("./routes/demoBookings");
+const kundliRoutes = require("./routes/kundli");
+const blogRoutes = require("./routes/blogs");
+const testimonialRoutes = require("./routes/testimonials");
+const uploadRoutes = require("./routes/upload");
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'healthy', 
+const app = express();
+
+/* =========================
+   CORS CONFIG (FIXED)
+========================= */
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow server-to-server / Postman
+      if (!origin) return callback(null, true);
+
+      // Allow localhost
+      if (origin === "http://localhost:5173") {
+        return callback(null, true);
+      }
+
+      // Allow ALL Vercel deployments (prod + preview)
+      if (origin.endsWith(".vercel.app")) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  })
+);
+
+/* =========================
+   BODY PARSERS
+========================= */
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+/* =========================
+   SESSION CONFIG
+========================= */
+app.use(
+  session({
+    name: "accurate-astro.sid",
+    secret: process.env.SESSION_SECRET || "dev-secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // true on Render
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    },
+  })
+);
+
+/* =========================
+   LOG REQUESTS (DEBUG)
+========================= */
+app.use((req, res, next) => {
+  console.log(`📡 ${req.method} ${req.originalUrl}`);
+  next();
+});
+
+/* =========================
+   ROUTES
+========================= */
+app.use("/api/upload", uploadRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/consultations", consultationRoutes);
+app.use("/api/demo-bookings", demoBookingRoutes);
+app.use("/api/kundli", kundliRoutes);
+app.use("/api/blogs", blogRoutes);
+app.use("/api/testimonials", testimonialRoutes);
+
+/* =========================
+   HEALTH CHECK
+========================= */
+app.get("/api/health", (req, res) => {
+  res.json({
+    success: true,
+    status: "healthy",
+    service: "Accurate Astro API",
     timestamp: new Date().toISOString(),
-    service: 'Accurate Astro API'
-  })
-})
+  });
+});
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Server Error:', err.stack)
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  })
-})
+/* =========================
+   ROOT (OPTIONAL)
+========================= */
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "Accurate Astro API running 🚀",
+  });
+});
 
-// 404 handler - FIXED VERSION
+/* =========================
+   404 HANDLER
+========================= */
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: 'Endpoint not found',
-    path: req.originalUrl
-  })
-})
+    message: "Endpoint not found",
+    path: req.originalUrl,
+  });
+});
 
-const PORT = process.env.PORT || 5000
+/* =========================
+   ERROR HANDLER
+========================= */
+app.use((err, req, res, next) => {
+  console.error("❌ Server Error:", err.message);
+
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || "Internal server error",
+    ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
+  });
+});
+
+/* =========================
+   SERVER START
+========================= */
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`)
-  console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`)
-  console.log(`🔗 Client URL: ${process.env.CLIENT_URL || 'http://localhost:5173'}`)
-})
-console.log('🔍 Loading routes...')
-
-// Add console logs for each route
-app.use('/api/testimonials', (req, res, next) => {
-  console.log(`📞 Testimonials route called: ${req.method} ${req.originalUrl}`)
-  next()
-})
-
-app.use('/api/blogs', (req, res, next) => {
-  console.log(`📞 Blogs route called: ${req.method} ${req.originalUrl}`)
-  next()
-})
-
-// Then your existing routes
-app.use('/api/testimonials', testimonialRoutes)
-app.use('/api/blogs', blogRoutes)
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌐 Environment: ${process.env.NODE_ENV || "development"}`);
+});
