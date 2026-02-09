@@ -2,6 +2,7 @@
   "name": "accurate-astro",
   "version": "1.0.0",
   "private": true,
+  "type": "commonjs",
   "workspaces": [
     "client",
     "server"
@@ -10,20 +11,17 @@
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "dev:client": "cd client && npm run dev",
     "dev:server": "cd server && npm run dev",
+
     "build": "npm run build:client",
     "build:client": "cd client && npm run build",
+
     "start": "cd server && npm start"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
-  "main": "index.js",
-  "keywords": [],
+  "dependencies": {},
   "author": "",
   "license": "ISC",
-  "description": "",
-  "type": "commonjs",
-  "dependencies": {
-    "react-player": "^3.4.0"
-  }
+  "description": ""
 }
