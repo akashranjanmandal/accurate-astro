@@ -113,7 +113,7 @@ const Kundli = () => {
                 <FaStar className="mr-2" />
                 <span className="font-semibold">Generate Your Birth Chart</span>
               </div>
-              <h2 className="text-3xl font-bold mb-2">Get Your <span className="text-teal-600">Kundli Report</span></h2>
+              <h2 className="text-3xl font-bold mb-2">Get Your <span className="text-teal-600">Hand Written Kundli Report</span></h2>
               <p className="text-gray-600">Complete birth chart analysis with personalized predictions</p>
             </div>
 
@@ -279,7 +279,7 @@ const Kundli = () => {
               {/* Pricing & Submit */}
               <div className="text-center space-y-4">
                 <div className="inline-block bg-gradient-to-r from-teal-500 to-emerald-500 text-white px-6 py-3 rounded-full">
-                  <span className="text-2xl font-bold">₹300</span>
+                  <span className="text-2xl font-bold">₹1999</span>
                   <span className="ml-2">One-Time Payment</span>
                 </div>
 
