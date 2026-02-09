@@ -296,7 +296,7 @@ const Kundli = () => {
                 >
                   <FaStar />
                   <span>
-                    {isSubmitting ? 'Processing...' : showPayment ? 'Opening Payment...' : 'Pay ₹300 & Generate Kundli'}
+                    {isSubmitting ? 'Processing...' : showPayment ? 'Opening Payment...' : 'Pay ₹1999 & Generate Kundli'}
                   </span>
                 </motion.button>
 
