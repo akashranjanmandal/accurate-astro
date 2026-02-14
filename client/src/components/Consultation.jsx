@@ -104,7 +104,7 @@ const Consultation = () => {
   }
 
   return (
-    <section id="consultation" className="section-padding bg-gradient-to-b from-white to-purple-50">
+    <section id="consultation" className="section-padding bg-gradient-to-b from-white to-blue-50">
       <div className="container-custom">
         <div className="max-w-4xl mx-auto">
           {/* Section Header */}
@@ -114,7 +114,7 @@ const Consultation = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <div className="inline-flex items-center mb-4 bg-purple-100 text-purple-700 px-4 py-2 rounded-full">
+            <div className="inline-flex items-center mb-4 bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
               <FaShieldAlt className="mr-2" />
               <span className="font-semibold">Secure Booking</span>
             </div>
@@ -136,7 +136,7 @@ const Consultation = () => {
           >
             <div className="md:flex">
               {/* Left Side - Benefits */}
-              <div className="md:w-1/2 bg-gradient-to-br from-purple-600 to-indigo-600 text-white p-8">
+              <div className="md:w-1/2 bg-gradient-to-br from-blue-600 to-indigo-600 text-white p-8">
                 <h3 className="text-2xl font-bold mb-6">What You'll Get</h3>
                 <ul className="space-y-4">
                   {[
@@ -162,7 +162,7 @@ const Consultation = () => {
               {/* Right Side - Form & Payment */}
               <div className="md:w-1/2 p-8">
                 <div className="text-center mb-8">
-                  <div className="inline-block px-6 py-2 bg-purple-100 text-purple-700 rounded-full mb-4">
+                  <div className="inline-block px-6 py-2 bg-blue-100 text-blue-700 rounded-full mb-4">
                     <span className="text-sm font-semibold">One-Time Payment</span>
                   </div>
                   <div className="flex items-end justify-center mb-2">
@@ -295,9 +295,9 @@ const Consultation = () => {
                   </div>
 
                   {/* Security Info */}
-                  <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                     <div className="flex items-center space-x-3">
-                      <FaLock className="text-purple-600" />
+                      <FaLock className="text-blue-600" />
                       <div>
                         <p className="font-semibold text-sm">Secure Payment</p>
                         <p className="text-xs text-gray-500">Powered by Razorpay • SSL Encrypted</p>
@@ -314,7 +314,7 @@ const Consultation = () => {
                     className={`w-full py-4 rounded-lg font-bold text-white transition-all flex items-center justify-center space-x-2 ${
                       isSubmitting || showPayment
                         ? 'bg-gray-400 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
+                        : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
                     }`}
                   >
                     <FaCreditCard />

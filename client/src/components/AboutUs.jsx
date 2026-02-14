@@ -34,7 +34,7 @@ const AboutUs = () => {
 
 
   return (
-    <section id="about" className="section-padding bg-gradient-to-b from-white to-purple-50">
+    <section id="about" className="section-padding bg-gradient-to-b from-white to-blue-50">
       <div className="container-custom">
         {/* Section Header */}
         <motion.div 
@@ -78,8 +78,8 @@ const AboutUs = () => {
                 className="absolute -top-6 -left-6 bg-white p-4 rounded-xl shadow-xl"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                    <FaStar className="text-purple-600 text-xl" />
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <FaStar className="text-blue-600 text-xl" />
                   </div>
                   <div>
                     <p className="font-bold text-lg">25+ Years</p>
@@ -91,7 +91,7 @@ const AboutUs = () => {
               <motion.div 
                 animate={{ y: [0, -15, 0] }}
                 transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
-                className="absolute -bottom-6 -right-6 bg-gradient-to-r from-purple-600 to-indigo-600 p-4 rounded-xl shadow-xl text-white"
+                className="absolute -bottom-6 -right-6 bg-gradient-to-r from-blue-600 to-indigo-600 p-4 rounded-xl shadow-xl text-white"
               >
                 <div className="flex items-center space-x-3">
                   <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
@@ -120,7 +120,7 @@ const AboutUs = () => {
             
             <div className="space-y-4 mb-8">
               <p className="text-gray-600 leading-relaxed">
-                At <span className="font-semibold text-purple-600">Accurate Astro</span>, we blend ancient Vedic wisdom with modern technology to provide you with the most accurate astrological insights. Our mission is to empower you with knowledge about your destiny, relationships, career, and life purpose.
+                At <span className="font-semibold text-blue-600">Accurate Astro</span>, we blend ancient Vedic wisdom with modern technology to provide you with the most accurate astrological insights. Our mission is to empower you with knowledge about your destiny, relationships, career, and life purpose.
               </p>
               
               <p className="text-gray-600 leading-relaxed">
@@ -140,7 +140,7 @@ const AboutUs = () => {
                   transition={{ duration: 0.5, delay: feature.delay }}
                   className="flex items-start space-x-3 p-3 bg-white/50 rounded-lg hover:bg-white transition-colors duration-300"
                 >
-                  <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
                     <div className="text-white">
                       {feature.icon}
                     </div>

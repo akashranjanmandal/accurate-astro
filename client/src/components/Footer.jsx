@@ -51,7 +51,7 @@ const Footer = () => {
                   key={index}
                   href={social.href}
                   aria-label={social.label}
-                  className="w-10 h-10 bg-gray-800 hover:bg-purple-600 rounded-full flex items-center justify-center transition-colors"
+                  className="w-10 h-10 bg-gray-800 hover:bg-blue-600 rounded-full flex items-center justify-center transition-colors"
                 >
                   {social.icon}
                 </a>
@@ -69,7 +69,7 @@ const Footer = () => {
                     href={`#${item.toLowerCase().replace(' ', '-')}`}
                     className="text-gray-400 hover:text-white transition-colors flex items-center group"
                   >
-                    <span className="w-2 h-2 bg-purple-600 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    <span className="w-2 h-2 bg-blue-600 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
                     {item}
                   </a>
                 </li>
@@ -90,7 +90,7 @@ const Footer = () => {
                 'Vastu Consultation'
               ].map((service) => (
                 <li key={service} className="text-gray-400 flex items-center">
-                  <FaStar className="text-purple-500 text-xs mr-3" />
+                  <FaStar className="text-blue-500 text-xs mr-3" />
                   {service}
                 </li>
               ))}
@@ -102,8 +102,8 @@ const Footer = () => {
             <h4 className="text-xl font-bold mb-6">Contact Us</h4>
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
-                <div className="w-10 h-10 bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0">
-                  <FaPhone className="text-purple-400" />
+                <div className="w-10 h-10 bg-blue-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                  <FaPhone className="text-blue-400" />
                 </div>
                 <div>
                   <p className="font-semibold">Phone Number</p>
@@ -112,8 +112,8 @@ const Footer = () => {
               </div>
               
               <div className="flex items-start space-x-3">
-                <div className="w-10 h-10 bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0">
-                  <FaEnvelope className="text-purple-400" />
+                <div className="w-10 h-10 bg-blue-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                  <FaEnvelope className="text-blue-400" />
                 </div>
                 <div>
                   <p className="font-semibold">Email Address</p>
@@ -122,8 +122,8 @@ const Footer = () => {
               </div>
               
               <div className="flex items-start space-x-3">
-                <div className="w-10 h-10 bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0">
-                  <FaMapMarkerAlt className="text-purple-400" />
+                <div className="w-10 h-10 bg-blue-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                  <FaMapMarkerAlt className="text-blue-400" />
                 </div>
                 <div>
                   <p className="font-semibold">Office Address</p>
@@ -164,7 +164,7 @@ const Footer = () => {
           className="text-center mt-8 pt-6 border-t border-gray-800"
         >
           <p className="text-gray-500 text-sm">
-            Developed with 💜 by <span className="text-purple-400 font-semibold">GOBT</span>
+            Developed with 💜 by <span className="text-blue-400 font-semibold">GOBT</span>
           </p>
           <p className="text-xs text-gray-600 mt-1">
             Cosmic energy flows through every line of code

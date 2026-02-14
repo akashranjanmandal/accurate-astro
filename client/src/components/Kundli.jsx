@@ -318,7 +318,7 @@ const Kundli = () => {
             <div className="bg-gradient-to-br from-teal-600 to-emerald-600 rounded-2xl p-1">
               <div className="bg-black rounded-xl overflow-hidden">
                 <div className="relative pt-[56.25%]">
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-900/80 to-indigo-900/80 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 to-indigo-900/80 flex items-center justify-center">
                     <button className="group">
                       <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                         <FaPlay className="text-white text-3xl ml-2" />
@@ -386,7 +386,7 @@ const Kundli = () => {
               {[
                 { text: '100% Accurate', color: 'from-green-500 to-emerald-500' },
                 { text: 'Secure Data', color: 'from-blue-500 to-cyan-500' },
-                { text: '24/7 Support', color: 'from-purple-500 to-pink-500' }
+                { text: '24/7 Support', color: 'from-blue-500 to-pink-500' }
               ].map((badge, index) => (
                 <div key={index} className={`bg-gradient-to-r ${badge.color} text-white p-4 rounded-xl text-center`}>
                   <div className="text-sm font-semibold">{badge.text}</div>

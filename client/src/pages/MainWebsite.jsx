@@ -4,13 +4,14 @@ import { motion } from 'framer-motion'
 import { FaStar, FaPlay, FaCalendarAlt, FaPhoneAlt, FaEnvelope, FaUser, FaClock, FaMapMarkerAlt, FaVenusMars, FaRocket, FaQuoteLeft, FaArrowRight } from 'react-icons/fa'
 import Header from '../components/Header'
 import Hero from '../components/Hero'
-import AboutUs from '../components/AboutUs' // Add this import
+import AboutUs from '../components/AboutUs' 
 import Testimonials from '../components/Testimonials'
 import DemoBooking from '../components/DemoBooking'
 import Consultation from '../components/Consultation'
 import Blogs from '../components/Blogs'
 import Kundli from '../components/Kundli'
 import Footer from '../components/Footer'
+import Popup from '../components/popup/Popup'
 import api from '../utils/api'
 
 const MainWebsite = () => {
@@ -95,20 +96,20 @@ const MainWebsite = () => {
     <div className="relative overflow-hidden">
       {/* Background Elements */}
       <div className="fixed inset-0 star-background pointer-events-none z-0" />
-      <div className="absolute top-20 left-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" />
+      <div className="absolute top-20 left-10 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" />
       <div className="absolute bottom-20 right-10 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-float" style={{ animationDelay: '2s' }} />
 
       <div className="relative z-10">
         <Header />
         <Hero />
-        <AboutUs /> {/* Add AboutUs component here */}
+        <AboutUs />
         
         {/* Show loading state */}
         {loading && (
           <div className="section-padding text-center">
             <div className="inline-block p-4 bg-blue-100 text-blue-800 rounded-lg">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                 <span>Loading data from API...</span>
               </div>
             </div>
@@ -138,6 +139,9 @@ const MainWebsite = () => {
         <Kundli />
         <Footer />
       </div>
+
+      {/* Add the Popup component */}
+      <Popup />
     </div>
   )
 }

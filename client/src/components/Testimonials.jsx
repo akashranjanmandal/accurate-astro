@@ -64,7 +64,7 @@ const Testimonials = ({ testimonials = [] }) => {
   }
 
   return (
-    <section id="testimonials" className="section-padding bg-gradient-to-b from-white to-purple-50">
+    <section id="testimonials" className="section-padding bg-gradient-to-b from-white to-blue-50">
       <div className="container-custom">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -101,7 +101,7 @@ const Testimonials = ({ testimonials = [] }) => {
                 {/* Card Content */}
                 {testimonial.hasVideo ? (
                   // Video Testimonial Card
-                  <div className="relative h-56 bg-gradient-to-br from-purple-600 to-indigo-600 cursor-pointer group">
+                  <div className="relative h-56 bg-gradient-to-br from-blue-600 to-indigo-600 cursor-pointer group">
                     <img 
                       src={`https://img.youtube.com/vi/${testimonial.video_id}/maxresdefault.jpg`} 
                       alt={testimonial?.name || 'Testimonial'}
@@ -118,7 +118,7 @@ const Testimonials = ({ testimonials = [] }) => {
                   </div>
                 ) : (
                   // Text Only Testimonial Card
-                  <div className="h-56 bg-gradient-to-br from-purple-500 to-indigo-500 cursor-pointer group flex flex-col items-center justify-center p-6 text-white">
+                  <div className="h-56 bg-gradient-to-br from-blue-500 to-indigo-500 cursor-pointer group flex flex-col items-center justify-center p-6 text-white">
                     <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mb-4">
                       <FaQuoteLeft className="text-3xl" />
                     </div>
@@ -153,7 +153,7 @@ const Testimonials = ({ testimonials = [] }) => {
                         <FaMapMarkerAlt className="mr-1" /> {testimonial?.location || 'India'}
                       </p>
                     </div>
-                    <div className="text-astro-purple hover:text-astro-dark font-semibold flex items-center space-x-2">
+                    <div className="text-astro-blue hover:text-astro-dark font-semibold flex items-center space-x-2">
                       <span>{testimonial.hasVideo ? 'Watch' : 'Read'}</span>
                       <FaArrowRight />
                     </div>
@@ -176,7 +176,7 @@ const Testimonials = ({ testimonials = [] }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowAll(!showAll)}
-              className="px-8 py-3 bg-gradient-to-r from-astro-purple to-astro-teal text-white rounded-full font-semibold hover:shadow-xl transition-shadow flex items-center mx-auto space-x-2"
+              className="px-8 py-3 bg-gradient-to-r from-astro-blue to-astro-teal text-white rounded-full font-semibold hover:shadow-xl transition-shadow flex items-center mx-auto space-x-2"
             >
               <span>{showAll ? 'Show Less Testimonials' : `Show All ${processedTestimonials.length} Testimonials`}</span>
               <FaArrowRight className={showAll ? 'rotate-180 transition-transform' : ''} />
@@ -228,7 +228,7 @@ const Testimonials = ({ testimonials = [] }) => {
                     // Text Only Modal
                     <div className="p-8 md:p-12">
                       <div className="text-center mb-8">
-                        <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-6">
                           <FaQuoteLeft className="text-white text-3xl" />
                         </div>
                         <h3 className="text-2xl md:text-3xl font-bold mb-4">{selectedTestimonial.name}</h3>
@@ -244,9 +244,9 @@ const Testimonials = ({ testimonials = [] }) => {
                         </div>
                       </div>
                       
-                      <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 md:p-8 mb-6">
+                      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 md:p-8 mb-6">
                         <div className="flex items-start">
-                          <FaQuoteLeft className="text-purple-400 text-3xl mr-4 mt-1 flex-shrink-0" />
+                          <FaQuoteLeft className="text-blue-400 text-3xl mr-4 mt-1 flex-shrink-0" />
                           <p className="text-lg md:text-xl text-gray-700 italic leading-relaxed">
                             "{selectedTestimonial.description || 'Life-changing consultation! Highly recommended.'}"
                           </p>

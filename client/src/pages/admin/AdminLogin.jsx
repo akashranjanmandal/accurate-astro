@@ -67,7 +67,7 @@ const AdminLogin = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-50 p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -81,7 +81,7 @@ const AdminLogin = () => {
             transition={{ delay: 0.2 }}
             className="inline-block mb-4"
           >
-            <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-xl">
               <FaStar className="text-white text-2xl" />
             </div>
           </motion.div>
@@ -103,7 +103,7 @@ const AdminLogin = () => {
                   name="username"
                   value={formData.username}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 pl-10 rounded-lg border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 pl-10 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 focus:outline-none transition-colors"
                   placeholder="Enter your username"
                   required
                   disabled={isLoading}
@@ -125,7 +125,7 @@ const AdminLogin = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 pl-10 pr-10 rounded-lg border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-300 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 pl-10 pr-10 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-300 focus:outline-none transition-colors"
                   placeholder="Enter your password"
                   required
                   disabled={isLoading}
@@ -152,7 +152,7 @@ const AdminLogin = () => {
               className={`w-full py-3 rounded-lg font-bold text-white transition-all ${
                 isLoading
                   ? 'bg-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
+                  : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
               }`}
             >
               {isLoading ? 'Logging in...' : 'Login to Dashboard'}

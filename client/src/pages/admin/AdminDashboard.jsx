@@ -388,68 +388,70 @@ useEffect(() => {
     })
   }
 
-  const handleTestimonialSubmit = async (e) => {
-    e.preventDefault()
-    
-    console.log('Submitting testimonial data:', testimonialFormData)
-    
-    try {
-      const testimonialData = {
-        name: testimonialFormData.name,
-        youtube_url: testimonialFormData.youtube_url,
-        description: testimonialFormData.description,
-        rating: parseInt(testimonialFormData.rating),
-        location: testimonialFormData.location,
-        is_featured: testimonialFormData.is_featured,
-        status: testimonialFormData.status
-      }
-
-      console.log('Sending data to API:', testimonialData)
-
-      let response
-      if (editingTestimonial) {
-        response = await api.put(`/testimonials/${editingTestimonial.id}`, testimonialData)
-      } else {
-        response = await api.post('/testimonials', testimonialData)
-      }
-
-      console.log('API Response:', response.data)
-
-      if (response.data.success) {
-        toast.success(editingTestimonial ? 'Testimonial updated successfully' : 'Testimonial created successfully')
-        setEditingTestimonial(null)
-        setShowTestimonialForm(false)
-        setTestimonialFormData({
-          name: '',
-          youtube_url: '',
-          description: '',
-          rating: 5,
-          location: 'India',
-          is_featured: false,
-          status: 'active'
-        })
-        fetchDashboardData()
-      }
-      
-    } catch (error) {
-      console.error('Testimonial submission error:', error.response?.data || error)
-      toast.error(error.response?.data?.message || 'Error saving testimonial')
+const handleTestimonialSubmit = async (e) => {
+  e.preventDefault()
+  
+  console.log('Submitting testimonial data:', testimonialFormData)
+  
+  try {
+    const testimonialData = {
+      name: testimonialFormData.name,
+      youtube_url: testimonialFormData.youtube_url && testimonialFormData.youtube_url.trim() !== '' 
+        ? testimonialFormData.youtube_url 
+        : null,
+      description: testimonialFormData.description,
+      rating: parseInt(testimonialFormData.rating),
+      location: testimonialFormData.location,
+      is_featured: testimonialFormData.is_featured,
+      status: testimonialFormData.status
     }
-  }
 
-  const handleEditTestimonial = (testimonial) => {
-    setEditingTestimonial(testimonial)
-    setTestimonialFormData({
-      name: testimonial.name,
-      youtube_url: testimonial.youtube_url || '',
-      description: testimonial.description || '',
-      rating: testimonial.rating || 5,
-      location: testimonial.location || 'India',
-      is_featured: testimonial.is_featured || false,
-      status: testimonial.status || 'active'
-    })
-    setShowTestimonialForm(true)
+    console.log('Sending data to API:', testimonialData)
+
+    let response
+    if (editingTestimonial) {
+      response = await api.put(`/testimonials/${editingTestimonial.id}`, testimonialData)
+    } else {
+      response = await api.post('/testimonials', testimonialData)
+    }
+
+    console.log('API Response:', response.data)
+
+    if (response.data.success) {
+      toast.success(editingTestimonial ? 'Testimonial updated successfully' : 'Testimonial created successfully')
+      setEditingTestimonial(null)
+      setShowTestimonialForm(false)
+      setTestimonialFormData({
+        name: '',
+        youtube_url: '',
+        description: '',
+        rating: 5,
+        location: 'India',
+        is_featured: false,
+        status: 'active'
+      })
+      fetchDashboardData()
+    }
+    
+  } catch (error) {
+    console.error('Testimonial submission error:', error.response?.data || error)
+    toast.error(error.response?.data?.message || 'Error saving testimonial')
   }
+}
+
+const handleEditTestimonial = (testimonial) => {
+  setEditingTestimonial(testimonial)
+  setTestimonialFormData({
+    name: testimonial.name,
+    youtube_url: testimonial.youtube_url || '',
+    description: testimonial.description || '',
+    rating: testimonial.rating || 5,
+    location: testimonial.location || 'India',
+    is_featured: testimonial.is_featured || false,
+    status: testimonial.status || 'active'
+  })
+  setShowTestimonialForm(true)
+}
 
   const filteredBlogs = blogs.filter(blog =>
     blog.title.toLowerCase().includes(blogSearchTerm.toLowerCase()) ||
@@ -472,7 +474,7 @@ useEffect(() => {
 </button>
 
               <div className="ml-4 flex items-center">
-                <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
                   <FaStar className="text-white text-sm" />
                 </div>
                 <h1 className="ml-3 text-xl font-bold text-gray-800">
@@ -487,7 +489,7 @@ useEffect(() => {
                   <p className="text-sm font-semibold text-gray-800">{user?.username || 'Admin'}</p>
                   <p className="text-xs text-gray-500 capitalize">{user?.role || 'Admin'}</p>
                 </div>
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold">
                   {user?.username?.charAt(0).toUpperCase() || 'A'}
                 </div>
               </div>
@@ -533,7 +535,7 @@ useEffect(() => {
             }}
             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
               activeTab === item.id
-                ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white'
+                ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white'
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
@@ -548,7 +550,7 @@ useEffect(() => {
     <div className="p-4 border-t bg-white">
       <div className="mb-4 p-3 bg-gray-50 rounded-lg">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold">
             {user?.username?.charAt(0).toUpperCase() || 'A'}
           </div>
           <div>
@@ -611,8 +613,8 @@ useEffect(() => {
                       <p className="text-sm text-gray-500">Kundli Requests</p>
                       <p className="text-2xl font-bold mt-1">{kundliRequests.length}</p>
                     </div>
-                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                      <FaFileAlt className="text-purple-600" />
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <FaFileAlt className="text-blue-600" />
                     </div>
                   </div>
                 </div>
@@ -720,7 +722,7 @@ useEffect(() => {
                       placeholder="Search blogs..."
                       value={blogSearchTerm}
                       onChange={(e) => setBlogSearchTerm(e.target.value)}
-                      className="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full sm:w-64"
+                      className="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-64"
                     />
                     <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   </div>
@@ -743,7 +745,7 @@ useEffect(() => {
                       setImagePreview('')
                       setShowBlogForm(true)
                     }}
-                    className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-lg hover:opacity-90 flex items-center justify-center space-x-2"
+                    className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:opacity-90 flex items-center justify-center space-x-2"
                   >
                     <FaPlus />
                     <span>New Blog</span>
@@ -778,7 +780,7 @@ useEffect(() => {
                             }}
                           />
                         ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
+                          <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
                             <div className="text-white text-center">
                               <FaImage className="text-3xl sm:text-4xl mb-2 mx-auto" />
                               <p className="font-semibold">No Image</p>
@@ -824,7 +826,7 @@ useEffect(() => {
                           {blog.tags?.slice(0, 3).map((tag) => (
                             <span 
                               key={tag} 
-                              className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded"
+                              className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded"
                             >
                               {tag}
                             </span>
@@ -922,7 +924,7 @@ useEffect(() => {
                     name="title"
                     value={blogFormData.title}
                     onChange={handleBlogInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                     placeholder="Enter blog title"
                   />
@@ -937,7 +939,7 @@ useEffect(() => {
                     name="excerpt"
                     value={blogFormData.excerpt}
                     onChange={handleBlogInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     rows="3"
                     placeholder="Brief summary of the blog"
                   />
@@ -952,7 +954,7 @@ useEffect(() => {
                     name="content"
                     value={blogFormData.content}
                     onChange={handleBlogInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     rows="6"
                     required
                     placeholder="Write your blog content here..."
@@ -1031,7 +1033,7 @@ useEffect(() => {
                           className={`flex flex-col items-center justify-center px-4 py-6 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
                             uploadingImage 
                               ? 'bg-gray-100 border-gray-300' 
-                              : 'border-gray-300 hover:border-purple-500 hover:bg-purple-50'
+                              : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'
                           }`}
                         >
                           {uploadingImage ? (
@@ -1072,7 +1074,7 @@ useEffect(() => {
                           name="image_url"
                           value={blogFormData.image_url}
                           onChange={handleBlogInputChange}
-                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           placeholder="https://example.com/image.jpg"
                         />
                         {blogFormData.image_url && (
@@ -1102,7 +1104,7 @@ useEffect(() => {
                     name="tags"
                     value={blogFormData.tags}
                     onChange={handleBlogInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="vedic-astrology, horoscope, predictions"
                   />
                   <p className="mt-1 text-xs text-gray-500">
@@ -1120,7 +1122,7 @@ useEffect(() => {
                     name="author"
                     value={blogFormData.author}
                     onChange={handleBlogInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
@@ -1132,7 +1134,7 @@ useEffect(() => {
                       name="published"
                       checked={blogFormData.published}
                       onChange={handleBlogInputChange}
-                      className="rounded text-purple-600 focus:ring-purple-500"
+                      className="rounded text-blue-600 focus:ring-blue-500"
                     />
                     <span>Published</span>
                   </label>
@@ -1142,7 +1144,7 @@ useEffect(() => {
                       name="featured"
                       checked={blogFormData.featured}
                       onChange={handleBlogInputChange}
-                      className="rounded text-purple-600 focus:ring-purple-500"
+                      className="rounded text-blue-600 focus:ring-blue-500"
                     />
                     <span>Featured</span>
                   </label>
@@ -1159,7 +1161,7 @@ useEffect(() => {
                       name="meta_title"
                       value={blogFormData.meta_title}
                       onChange={handleBlogInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="SEO title for search engines"
                     />
                   </div>
@@ -1171,7 +1173,7 @@ useEffect(() => {
                       name="meta_description"
                       value={blogFormData.meta_description}
                       onChange={handleBlogInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       rows="2"
                       placeholder="SEO description for search engines"
                     />
@@ -1194,7 +1196,7 @@ useEffect(() => {
                   <button
                     type="submit"
                     disabled={uploadingImage}
-                    className="px-4 sm:px-6 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 sm:px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {uploadingImage ? (
                       <FaSpinner className="animate-spin" />
@@ -1242,48 +1244,46 @@ useEffect(() => {
                     name="name"
                     value={testimonialFormData.name}
                     onChange={handleTestimonialInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
                     placeholder="Enter client name"
                   />
                 </div>
 
                 {/* YouTube URL */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    <FaVideo className="inline mr-2" /> YouTube URL *
-                  </label>
-                  <input
-                    type="url"
-                    name="youtube_url"
-                    value={testimonialFormData.youtube_url}
-                    onChange={handleTestimonialInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                    required
-                    placeholder="https://www.youtube.com/watch?v=VIDEO_ID"
-                  />
-                  {testimonialFormData.youtube_url && (
-                    <div className="mt-2 p-2 bg-gray-50 rounded">
-                      <p className="text-sm text-gray-600">
-                        Video ID: {extractVideoId(testimonialFormData.youtube_url) || 'Invalid URL'}
-                      </p>
-                      {extractVideoId(testimonialFormData.youtube_url) && (
-                        <div className="mt-2 relative pb-[56.25%]">
-                          <iframe
-                            src={`https://www.youtube.com/embed/${extractVideoId(testimonialFormData.youtube_url)}`}
-                            className="absolute top-0 left-0 w-full h-full rounded"
-                            title="Preview"
-                            allowFullScreen
-                          />
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  <p className="mt-1 text-xs text-gray-500">
-                    Full YouTube URL (e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-                  </p>
-                </div>
-
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    <FaVideo className="inline mr-2" /> YouTube URL (Optional)
+  </label>
+  <input
+    type="url"
+    name="youtube_url"
+    value={testimonialFormData.youtube_url}
+    onChange={handleTestimonialInputChange}
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    placeholder="https://www.youtube.com/watch?v=VIDEO_ID (optional)"
+  />
+  {testimonialFormData.youtube_url && testimonialFormData.youtube_url.trim() !== '' && (
+    <div className="mt-2 p-2 bg-gray-50 rounded">
+      <p className="text-sm text-gray-600">
+        Video ID: {extractVideoId(testimonialFormData.youtube_url) || 'Invalid URL'}
+      </p>
+      {extractVideoId(testimonialFormData.youtube_url) && (
+        <div className="mt-2 relative pb-[56.25%]">
+          <iframe
+            src={`https://www.youtube.com/embed/${extractVideoId(testimonialFormData.youtube_url)}`}
+            className="absolute top-0 left-0 w-full h-full rounded"
+            title="Preview"
+            allowFullScreen
+          />
+        </div>
+      )}
+    </div>
+  )}
+  <p className="mt-1 text-xs text-gray-500">
+    Leave empty if you only want to show text testimonial
+  </p>
+</div>
                 {/* Description */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1293,7 +1293,7 @@ useEffect(() => {
                     name="description"
                     value={testimonialFormData.description}
                     onChange={handleTestimonialInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     rows="4"
                     required
                     placeholder="What did the client say about your service?"
@@ -1335,7 +1335,7 @@ useEffect(() => {
                     name="location"
                     value={testimonialFormData.location}
                     onChange={handleTestimonialInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="e.g., Mumbai, India"
                   />
                 </div>
@@ -1348,7 +1348,7 @@ useEffect(() => {
                       name="is_featured"
                       checked={testimonialFormData.is_featured}
                       onChange={handleTestimonialInputChange}
-                      className="rounded text-purple-600 focus:ring-purple-500"
+                      className="rounded text-blue-600 focus:ring-blue-500"
                     />
                     <span>Featured Testimonial</span>
                   </label>
@@ -1363,7 +1363,7 @@ useEffect(() => {
                     name="status"
                     value={testimonialFormData.status}
                     onChange={handleTestimonialInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
@@ -1382,7 +1382,7 @@ useEffect(() => {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 sm:px-6 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center space-x-2"
+                    className="px-4 sm:px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center space-x-2"
                   >
                     <FaSave />
                     <span>{editingTestimonial ? 'Update Testimonial' : 'Add Testimonial'}</span>
@@ -1675,7 +1675,7 @@ const TestimonialsManagement = ({ testimonials, loading, onDelete, onEdit, onAdd
         <h2 className="text-xl font-bold">Testimonials Management</h2>
         <button 
           onClick={onAddNew}
-          className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-lg hover:opacity-90 text-sm flex items-center space-x-2 transition-opacity"
+          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:opacity-90 text-sm flex items-center space-x-2 transition-opacity"
         >
           <FaPlus />
           <span>Add New Testimonial</span>
@@ -1689,7 +1689,9 @@ const TestimonialsManagement = ({ testimonials, loading, onDelete, onEdit, onAdd
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((testimonial) => {
-            const videoId = extractVideoId(testimonial.youtube_url)
+            const videoId = testimonial.youtube_url ? extractVideoId(testimonial.youtube_url) : null
+            const hasVideo = !!videoId
+            
             return (
               <div key={testimonial.id} className="border rounded-xl p-4 hover:shadow-lg transition-shadow bg-white">
                 <div className="flex justify-between items-start mb-3">
@@ -1713,8 +1715,8 @@ const TestimonialsManagement = ({ testimonials, loading, onDelete, onEdit, onAdd
                   </div>
                 </div>
                 
-                {/* Video Preview */}
-                {videoId && (
+                {/* Video Preview - Only show if video exists */}
+                {hasVideo ? (
                   <div className="mb-3">
                     <div className="relative pb-[56.25%] bg-gray-100 rounded-lg overflow-hidden">
                       <iframe
@@ -1725,24 +1727,36 @@ const TestimonialsManagement = ({ testimonials, loading, onDelete, onEdit, onAdd
                         allowFullScreen
                       />
                     </div>
-                    <div className="mt-1 text-xs text-gray-500">
-                      YouTube Video: {videoId}
+                    <div className="mt-1 text-xs text-gray-500 flex items-center justify-between">
+                      <span>YouTube Video: {videoId}</span>
+                      <span className="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs">
+                        Has Video
+                      </span>
                     </div>
+                  </div>
+                ) : (
+                  /* No Video Placeholder */
+                  <div className="mb-3 bg-gray-50 rounded-lg p-4 text-center">
+                    <FaVideo className="text-2xl mx-auto mb-2 text-gray-400" />
+                    <p className="text-sm text-gray-500">No video attached</p>
+                    <span className="inline-block mt-1 px-2 py-0.5 bg-gray-200 text-gray-700 rounded-full text-xs">
+                      Text Only
+                    </span>
                   </div>
                 )}
                 
-                {/* Testimonial Text */}
+                {/* Testimonial Text - Always show */}
                 <div className="mb-4">
                   <div className="flex items-start mb-2">
                     <FaQuoteLeft className="text-gray-300 mr-2 mt-1 flex-shrink-0" />
                     <p className="text-gray-600 text-sm line-clamp-3">
-                      {testimonial.description}
+                      {testimonial.description || 'No description provided'}
                     </p>
                   </div>
                   {testimonial.description?.length > 150 && (
                     <button 
                       onClick={() => {}}
-                      className="text-xs text-purple-600 hover:text-purple-800"
+                      className="text-xs text-blue-600 hover:text-blue-800"
                     >
                       Read more
                     </button>
@@ -1762,16 +1776,23 @@ const TestimonialsManagement = ({ testimonials, loading, onDelete, onEdit, onAdd
                     <button 
                       onClick={() => onEdit(testimonial)}
                       className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      title="Edit testimonial"
                     >
                       <FaEdit className="w-4 h-4" />
                     </button>
                     <button 
                       onClick={() => onDelete(testimonial.id)}
                       className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Delete testimonial"
                     >
                       <FaTrash className="w-4 h-4" />
                     </button>
                   </div>
+                </div>
+
+                {/* Type indicator */}
+                <div className="mt-2 text-xs text-gray-400">
+                  Type: {hasVideo ? 'Video + Text' : 'Text Only'}
                 </div>
               </div>
             )

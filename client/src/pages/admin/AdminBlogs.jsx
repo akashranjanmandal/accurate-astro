@@ -160,7 +160,7 @@ const AdminBlogs = ({ blogs: propBlogs, loading: propLoading, onRefresh }) => {
               placeholder="Search blogs..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full sm:w-auto"
+              className="pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full sm:w-auto"
             />
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           </div>
@@ -181,7 +181,7 @@ const AdminBlogs = ({ blogs: propBlogs, loading: propLoading, onRefresh }) => {
               })
               setShowForm(true)
             }}
-            className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-lg hover:opacity-90 flex items-center justify-center space-x-2"
+            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:opacity-90 flex items-center justify-center space-x-2"
           >
             <FaPlus />
             <span>New Blog</span>
@@ -287,7 +287,7 @@ const AdminBlogs = ({ blogs: propBlogs, loading: propLoading, onRefresh }) => {
                       name="published"
                       checked={formData.published}
                       onChange={handleInputChange}
-                      className="rounded text-purple-600 focus:ring-purple-500"
+                      className="rounded text-blue-600 focus:ring-blue-500"
                     />
                     <span>Published</span>
                   </label>
@@ -297,7 +297,7 @@ const AdminBlogs = ({ blogs: propBlogs, loading: propLoading, onRefresh }) => {
                       name="featured"
                       checked={formData.featured}
                       onChange={handleInputChange}
-                      className="rounded text-purple-600 focus:ring-purple-500"
+                      className="rounded text-blue-600 focus:ring-blue-500"
                     />
                     <span>Featured</span>
                   </label>
@@ -314,7 +314,7 @@ const AdminBlogs = ({ blogs: propBlogs, loading: propLoading, onRefresh }) => {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 sm:px-6 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-lg hover:opacity-90 flex items-center justify-center space-x-2"
+                    className="px-4 sm:px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:opacity-90 flex items-center justify-center space-x-2"
                   >
                     <FaSave />
                     <span>{editingBlog ? 'Update Blog' : 'Create Blog'}</span>
@@ -349,7 +349,7 @@ const AdminBlogs = ({ blogs: propBlogs, loading: propLoading, onRefresh }) => {
                     className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
+                  <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
                     <div className="text-white text-center">
                       <FaImage className="text-3xl sm:text-4xl mb-2 mx-auto" />
                       <p className="font-semibold">No Image</p>
@@ -395,7 +395,7 @@ const AdminBlogs = ({ blogs: propBlogs, loading: propLoading, onRefresh }) => {
                   {blog.tags?.slice(0, 3).map((tag) => (
                     <span 
                       key={tag} 
-                      className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded"
+                      className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded"
                     >
                       {tag}
                     </span>

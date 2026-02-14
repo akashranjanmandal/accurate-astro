@@ -112,8 +112,8 @@ const DemoBooking = () => {
               </div>
 
               <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <FaCheck className="text-purple-600 text-xl" />
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <FaCheck className="text-blue-600 text-xl" />
                 </div>
                 <div>
                   <h4 className="font-bold text-lg mb-2">No Obligation</h4>
@@ -281,8 +281,8 @@ const DemoBooking = () => {
                         onClick={() => handleDateSelect(date)}
                         className={`py-3 rounded-lg border transition-all ${
                           selectedDate === date 
-                            ? 'bg-purple-600 text-white border-purple-600' 
-                            : 'border-gray-300 hover:border-purple-400 hover:bg-purple-50'
+                            ? 'bg-blue-600 text-white border-blue-600' 
+                            : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'
                         }`}
                       >
                         <div className="text-sm">{day}</div>
@@ -318,8 +318,8 @@ const DemoBooking = () => {
                         !selectedDate 
                           ? 'opacity-50 cursor-not-allowed bg-gray-100'
                           : selectedTime === time
-                            ? 'bg-purple-600 text-white border-purple-600'
-                            : 'border-gray-300 hover:border-purple-400 hover:bg-purple-50'
+                            ? 'bg-blue-600 text-white border-blue-600'
+                            : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'
                       }`}
                     >
                       <span className="font-medium">{time}</span>

@@ -14,7 +14,7 @@ const Hero = () => {
             transition={{ duration: 0.8 }}
             className="text-center md:text-left md:pl-8 lg:pl-12 xl:pl-16"
           >
-            <div className="inline-flex items-center space-x-2 mb-6 bg-purple-100 text-purple-700 px-4 py-2 rounded-full">
+            <div className="inline-flex items-center space-x-2 mb-6 bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
               <FaStar className="text-yellow-500" />
               <span className="font-semibold">Trusted by 10,000+ Clients Worldwide</span>
             </div>
@@ -33,7 +33,7 @@ const Hero = () => {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 sm:gap-6 mb-8 md:pr-8">
               <div className="text-center">
-                <div className="text-2xl sm:text-3xl font-bold text-purple-600">99%</div>
+                <div className="text-2xl sm:text-3xl font-bold text-blue-600">99%</div>
                 <div className="text-xs sm:text-sm text-gray-500">Accuracy Rate</div>
               </div>
               <div className="text-center">
@@ -79,13 +79,13 @@ const Hero = () => {
           >
             <div className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 mx-auto">
               {/* Outer Ring */}
-              <div className="absolute inset-0 border-6 md:border-8 border-purple-200 rounded-full animate-spin-slow" />
+              <div className="absolute inset-0 border-6 md:border-8 border-blue-200 rounded-full animate-spin-slow" />
               
               {/* Middle Ring */}
               <div className="absolute inset-8 sm:inset-10 md:inset-12 border-3 md:border-4 border-amber-200 rounded-full animate-spin-slow-reverse" />
               
               {/* Inner Circle */}
-              <div className="absolute inset-16 sm:inset-20 md:inset-24 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center">
+              <div className="absolute inset-16 sm:inset-20 md:inset-24 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
                 <div className="text-center text-white">
                   <div className="text-2xl sm:text-3xl md:text-4xl font-bold">ॐ</div>
                   <div className="text-xs sm:text-sm md:text-base mt-1 md:mt-2">Cosmic Energy</div>
@@ -93,7 +93,7 @@ const Hero = () => {
               </div>
 
               {/* Zodiac Symbols - Responsive positioning */}
-              {['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'].map((sign, index) => (
+              {['♈', '♉', '♊', '♋', '♌', '♍', 'x', '♏', '♐', '♑', '♒', '♓'].map((sign, index) => (
                 <div
                   key={sign}
                   className="absolute w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-white rounded-full flex items-center justify-center shadow-lg transform -translate-x-1/2 -translate-y-1/2"

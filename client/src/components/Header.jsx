@@ -32,13 +32,13 @@ const Header = () => {
               <img 
                 src="/images/logo.png" 
                 alt="Accurate Astro Logo" 
-                className="w-12 h-12 object-cover rounded-full border-2 border-purple-100"
+                className="w-12 h-12 object-cover rounded-full border-2 border-blue-100"
                 onError={(e) => {
                   console.error('Logo failed to load')
                   // Fallback to gradient logo
                   e.target.style.display = 'none'
                   const fallback = document.createElement('div')
-                  fallback.className = 'w-12 h-12 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-full flex items-center justify-center'
+                  fallback.className = 'w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center'
                   fallback.innerHTML = '<span class="text-white font-bold text-lg">AA</span>'
                   e.target.parentNode.appendChild(fallback)
                 }}
@@ -47,7 +47,7 @@ const Header = () => {
             
             {/* Logo Text */}
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 Accurate Astro
               </h1>
               <p className="text-xs text-gray-500">Vedic Astrology Solutions</p>
@@ -62,10 +62,10 @@ const Header = () => {
                 href={item.href}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="text-gray-700 hover:text-purple-600 font-medium transition-colors relative group"
+                className="text-gray-700 hover:text-blue-600 font-medium transition-colors relative group"
               >
                 {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-600 to-indigo-600 group-hover:w-full transition-all duration-300" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-indigo-600 group-hover:w-full transition-all duration-300" />
               </motion.a>
             ))}
             
@@ -74,7 +74,7 @@ const Header = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               href="tel:+919876543210"
-              className="flex items-center space-x-2 px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full hover:shadow-lg transition-shadow ml-4"
+              className="flex items-center space-x-2 px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full hover:shadow-lg transition-shadow ml-4"
             >
               <FaPhoneAlt className="text-sm" />
               <span className="font-medium">Call Now</span>
@@ -88,7 +88,7 @@ const Header = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               href="tel:+919876543210"
-              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full text-sm"
+              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full text-sm"
             >
               <FaPhoneAlt />
               <span className="hidden sm:inline">Call</span>
@@ -117,10 +117,10 @@ const Header = () => {
                   key={item.name}
                   href={item.href}
                   whileTap={{ scale: 0.98 }}
-                  className="text-gray-700 hover:text-purple-600 font-medium py-3 px-4 rounded-lg hover:bg-purple-50 transition-colors flex items-center group"
+                  className="text-gray-700 hover:text-blue-600 font-medium py-3 px-4 rounded-lg hover:bg-blue-50 transition-colors flex items-center group"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <span className="w-2 h-2 bg-purple-600 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                  <span className="w-2 h-2 bg-blue-600 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
                   {item.name}
                 </motion.a>
               ))}
@@ -129,7 +129,7 @@ const Header = () => {
               <motion.a
                 whileTap={{ scale: 0.98 }}
                 href="tel:+919876543210"
-                className="flex items-center justify-center space-x-2 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg mt-2"
+                className="flex items-center justify-center space-x-2 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg mt-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <FaPhoneAlt />

@@ -21,9 +21,9 @@ export default {
         'poppins': ['Poppins', 'sans-serif'],
       },
       colors: {
-        'astro-purple': '#8B5CF6',
+        'astro-blue': '#191970',
         'astro-dark': '#1E1B4B',
-        'astro-light': '#C4B5FD',
+        'astro-light': '#3f50cd',
         'astro-gold': '#F59E0B',
         'astro-teal': '#0D9488',
       },

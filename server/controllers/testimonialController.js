@@ -22,7 +22,7 @@ const createTestimonial = async (req, res) => {
       })
     }
 
-    // Validate YouTube URL if provided
+    // Validate YouTube URL if provided and not empty
     if (youtube_url && youtube_url.trim() !== '') {
       const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/
       if (!youtubeRegex.test(youtube_url)) {
@@ -57,12 +57,9 @@ const createTestimonial = async (req, res) => {
       location: location || null,
       is_featured: is_featured || false,
       display_order: display_order || 0,
-      status: status || 'active'
-    }
-
-    // Only include youtube_url if provided
-    if (youtube_url && youtube_url.trim() !== '') {
-      testimonialData.youtube_url = youtube_url
+      status: status || 'active',
+      // Convert empty string to null
+      youtube_url: youtube_url && youtube_url.trim() !== '' ? youtube_url : null
     }
 
     const { data: testimonial, error } = await supabaseAdmin
@@ -287,10 +284,30 @@ const updateTestimonial = async (req, res) => {
       })
     }
 
+    // Clean up the update data
+    const cleanedData = {
+      name: updateData.name,
+      description: updateData.description,
+      rating: updateData.rating,
+      location: updateData.location,
+      is_featured: updateData.is_featured,
+      status: updateData.status
+    }
+
+    // Handle youtube_url specially - if it's empty string or null, remove it from update
+    // This way the column keeps its existing value or uses the default
+    if (updateData.youtube_url && updateData.youtube_url.trim() !== '') {
+      cleanedData.youtube_url = updateData.youtube_url
+    } else {
+      // If it's empty or null, we don't include it in the update
+      // This avoids the NOT NULL constraint violation
+      console.log('YouTube URL is empty, keeping existing value or default')
+    }
+
     // Update testimonial - use admin client for RLS bypass
     const { data: testimonial, error } = await supabaseAdmin
       .from('testimonials')
-      .update(updateData)
+      .update(cleanedData)
       .eq('id', id)
       .select()
       .single()

@@ -36,7 +36,7 @@ const Blogs = ({ blogs = [] }) => {
               className="inline-block mb-4"
             >
               <span className="text-astro-teal font-semibold text-sm uppercase tracking-wider">Astrology Insights</span>
-              <div className="h-1 w-20 bg-gradient-to-r from-astro-teal to-astro-purple mx-auto mt-2" />
+              <div className="h-1 w-20 bg-gradient-to-r from-astro-teal to-astro-blue mx-auto mt-2" />
             </motion.div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Latest <span className="gradient-text">Astrology Blogs</span>
@@ -66,7 +66,7 @@ const Blogs = ({ blogs = [] }) => {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
+                    <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
                       <div className="text-white text-center">
                         <div className="text-4xl mb-2">✨</div>
                         <p className="font-semibold">Astrology Wisdom</p>
@@ -96,7 +96,7 @@ const Blogs = ({ blogs = [] }) => {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-xl font-bold mb-3 line-clamp-2 group-hover:text-purple-600 transition-colors">
+                  <h3 className="text-xl font-bold mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
                     {blog?.title || 'Astrology Insights'}
                   </h3>
 
@@ -109,7 +109,7 @@ const Blogs = ({ blogs = [] }) => {
                   <div className="flex items-center justify-between border-t border-gray-100 pt-4">
                     <button 
                       onClick={() => openBlogModal(blog)}
-                      className="text-astro-purple font-semibold hover:text-astro-dark flex items-center space-x-2 group"
+                      className="text-astro-blue font-semibold hover:text-astro-dark flex items-center space-x-2 group"
                     >
                       <span>Read Full Article</span>
                       <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
@@ -127,7 +127,7 @@ const Blogs = ({ blogs = [] }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={loadMore}
-                className="px-8 py-3 bg-gradient-to-r from-astro-purple to-astro-teal text-white rounded-full font-semibold hover:shadow-xl transition-shadow flex items-center mx-auto space-x-2"
+                className="px-8 py-3 bg-gradient-to-r from-astro-blue to-astro-teal text-white rounded-full font-semibold hover:shadow-xl transition-shadow flex items-center mx-auto space-x-2"
               >
                 <span>Load More Articles</span>
                 <FaArrowRight />
@@ -171,7 +171,7 @@ const Blogs = ({ blogs = [] }) => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center">
+                  <div className="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
                     <div className="text-white text-center">
                       <div className="text-6xl mb-4">✨</div>
                       <p className="text-2xl font-semibold">Astrology Wisdom</p>
