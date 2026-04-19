@@ -107,7 +107,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <p className="font-semibold">Phone Number</p>
-                  <p className="text-gray-400">+91 98765 43210</p>
+                  <p className="text-gray-400">8335849855</p>
                 </div>
               </div>
               
@@ -117,7 +117,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <p className="font-semibold">Email Address</p>
-                  <p className="text-gray-400">contact@accurateastro.com</p>
+                  <p className="text-gray-400">accurateastro111@gmail.com</p>
                 </div>
               </div>
               
