@@ -73,7 +73,7 @@ const Header = () => {
             <motion.a
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              href="tel:+919876543210"
+              href="tel:8335849855"
               className="flex items-center space-x-2 px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full hover:shadow-lg transition-shadow ml-4"
             >
               <FaPhoneAlt className="text-sm" />
@@ -87,7 +87,7 @@ const Header = () => {
             <motion.a
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              href="tel:+919876543210"
+              href="tel:8335849855"
               className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full text-sm"
             >
               <FaPhoneAlt />
@@ -128,12 +128,12 @@ const Header = () => {
               {/* Mobile Call Button */}
               <motion.a
                 whileTap={{ scale: 0.98 }}
-                href="tel:+919876543210"
+                href="tel:8335849855"
                 className="flex items-center justify-center space-x-2 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg mt-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <FaPhoneAlt />
-                <span>Call Now: +91 98765 43210</span>
+                <span>Call Now: 8335849855</span>
               </motion.a>
             </div>
           </motion.div>

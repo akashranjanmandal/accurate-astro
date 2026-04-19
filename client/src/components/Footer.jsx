@@ -127,7 +127,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <p className="font-semibold">Office Address</p>
-                  <p className="text-gray-400">Astro Tower, Sector 45, Noida, UP 201301</p>
+                  <p className="text-gray-400">Kolkata, sodepur, 700111</p>
                 </div>
               </div>
             </div>
