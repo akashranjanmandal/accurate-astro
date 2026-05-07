@@ -29,6 +29,7 @@ app.use(
         "http://localhost:5174",
         "https://accurateastro.in",
         "https://www.accurateastro.in",
+        "https://slategrey-cheetah-582252.hostingersite.com",
       ];
 
       // allow Vercel preview + prod domains
