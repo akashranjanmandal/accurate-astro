@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
-import { FaUser, FaPhoneAlt, FaEnvelope, FaCreditCard, FaLock, FaShieldAlt, FaCalendar, FaVenusMars, FaClock, FaMapMarkerAlt } from 'react-icons/fa'
+import { FaUser, FaPhoneAlt, FaEnvelope, FaCreditCard, FaLock, FaShieldAlt, FaCalendar, FaVenusMars } from 'react-icons/fa'
 import api from '../utils/api'
 
 const Consultation = () => {
@@ -40,7 +40,7 @@ const Consultation = () => {
             ...response,
             consultationId: orderData.consultationId
           })
-          
+
           if (verifyResponse.data.success) {
             toast.success('Payment successful! Consultation booked.')
             setShowPayment(false)
@@ -122,7 +122,7 @@ const Consultation = () => {
               Book Your <span className="gradient-text">Personal Consultation</span>
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Get comprehensive astrology guidance with our expert consultation. 
+              Get comprehensive astrology guidance with our expert consultation.
               One-on-one session with detailed analysis of your birth chart.
             </p>
           </motion.div>
@@ -196,7 +196,7 @@ const Consultation = () => {
                     </label>
                     <input
                       type="email"
-                      {...register('email', { 
+                      {...register('email', {
                         required: 'Email is required',
                         pattern: {
                           value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -218,7 +218,7 @@ const Consultation = () => {
                     </label>
                     <input
                       type="tel"
-                      {...register('phone', { 
+                      {...register('phone', {
                         required: 'Phone number is required',
                         pattern: {
                           value: /^[0-9]{10}$/,
@@ -240,7 +240,7 @@ const Consultation = () => {
                     </label>
                     <input
                       type="date"
-                      {...register('dob', { 
+                      {...register('dob', {
                         required: 'Date of birth is required',
                         validate: {
                           minAge: (value) => {
@@ -294,35 +294,6 @@ const Consultation = () => {
                     )}
                   </div>
 
-                  {/* Birth Time (Optional) */}
-                  <div>
-                    <label className="form-label">
-                      <FaClock className="inline mr-2" /> Birth Time
-                      <span className="ml-2 text-xs text-gray-400 font-normal">(optional)</span>
-                    </label>
-                    <input
-                      type="time"
-                      {...register('birth_time')}
-                      className="form-input"
-                    />
-                    <p className="text-xs text-gray-400 mt-1">Leave blank if not known</p>
-                  </div>
-
-                  {/* Birth Place (Optional) */}
-                  <div>
-                    <label className="form-label">
-                      <FaMapMarkerAlt className="inline mr-2" /> Birth Place
-                      <span className="ml-2 text-xs text-gray-400 font-normal">(optional)</span>
-                    </label>
-                    <input
-                      type="text"
-                      {...register('birth_place')}
-                      className="form-input"
-                      placeholder="City, State, Country"
-                    />
-                    <p className="text-xs text-gray-400 mt-1">Leave blank if not known</p>
-                  </div>
-
                   {/* Security Info */}
                   <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                     <div className="flex items-center space-x-3">
@@ -340,11 +311,10 @@ const Consultation = () => {
                     whileTap={{ scale: 0.98 }}
                     type="submit"
                     disabled={isSubmitting || showPayment}
-                    className={`w-full py-4 rounded-lg font-bold text-white transition-all flex items-center justify-center space-x-2 ${
-                      isSubmitting || showPayment
+                    className={`w-full py-4 rounded-lg font-bold text-white transition-all flex items-center justify-center space-x-2 ${isSubmitting || showPayment
                         ? 'bg-gray-400 cursor-not-allowed'
                         : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700'
-                    }`}
+                      }`}
                   >
                     <FaCreditCard />
                     <span>{isSubmitting ? 'Processing...' : showPayment ? 'Opening Payment...' : 'Pay ₹600 & Book Now'}</span>

@@ -3,22 +3,22 @@ const { supabase, supabaseAdmin } = require('../config/database')
 
 const createDemoBooking = async (req, res) => {
   try {
-    const { name, phone, email, date, time, dob, gender, birth_time, birth_place } = req.body
+    const { name, phone, email, date, time, dob, gender } = req.body
 
     // Validate required fields
     if (!name || !phone || !date || !time || !dob || !gender) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'All fields are required' 
+      return res.status(400).json({
+        success: false,
+        message: 'All fields are required'
       })
     }
 
     // Validate phone number format
     const phoneRegex = /^[0-9]{10}$/
     if (!phoneRegex.test(phone)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Please enter a valid 10-digit phone number' 
+      return res.status(400).json({
+        success: false,
+        message: 'Please enter a valid 10-digit phone number'
       })
     }
 
@@ -26,9 +26,9 @@ const createDemoBooking = async (req, res) => {
     if (email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       if (!emailRegex.test(email)) {
-        return res.status(400).json({ 
-          success: false, 
-          message: 'Please enter a valid email address' 
+        return res.status(400).json({
+          success: false,
+          message: 'Please enter a valid email address'
         })
       }
     }
@@ -36,9 +36,9 @@ const createDemoBooking = async (req, res) => {
     // Validate gender
     const validGenders = ['male', 'female', 'other', 'prefer_not_to_say']
     if (!validGenders.includes(gender)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Invalid gender selection' 
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid gender selection'
       })
     }
 
@@ -47,26 +47,26 @@ const createDemoBooking = async (req, res) => {
     const today = new Date()
     let age = today.getFullYear() - dobDate.getFullYear()
     const monthDiff = today.getMonth() - dobDate.getMonth()
-    
+
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
       age--
     }
-    
+
     if (age < 18) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'You must be at least 18 years old' 
+      return res.status(400).json({
+        success: false,
+        message: 'You must be at least 18 years old'
       })
     }
 
     // Validate date of birth range (100 years max)
     const minDate = new Date()
     minDate.setFullYear(minDate.getFullYear() - 100)
-    
+
     if (dobDate < minDate || dobDate > today) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Invalid date of birth' 
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid date of birth'
       })
     }
 
@@ -74,20 +74,20 @@ const createDemoBooking = async (req, res) => {
     const demoDate = new Date(date)
     const todayDate = new Date()
     todayDate.setHours(0, 0, 0, 0)
-    
+
     if (demoDate < todayDate) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Cannot book demo for past dates' 
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot book demo for past dates'
       })
     }
 
     // Validate time format
     const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/
     if (!timeRegex.test(time)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Invalid time format. Use HH:MM format.' 
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid time format. Use HH:MM format.'
       })
     }
 
@@ -101,9 +101,9 @@ const createDemoBooking = async (req, res) => {
       .single()
 
     if (existingBooking) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'This time slot is already booked. Please choose another time.' 
+      return res.status(400).json({
+        success: false,
+        message: 'This time slot is already booked. Please choose another time.'
       })
     }
 
@@ -116,8 +116,6 @@ const createDemoBooking = async (req, res) => {
       time,
       dob,
       gender,
-      birth_time: birth_time || null,
-      birth_place: birth_place || null,
       status: 'submitted'
     }
 
@@ -129,9 +127,9 @@ const createDemoBooking = async (req, res) => {
 
     if (error) {
       console.error('Demo booking creation error:', error)
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Error creating demo booking' 
+      return res.status(500).json({
+        success: false,
+        message: 'Error creating demo booking'
       })
     }
 
@@ -143,9 +141,9 @@ const createDemoBooking = async (req, res) => {
 
   } catch (error) {
     console.error('Create demo booking error:', error)
-    res.status(500).json({ 
-      success: false, 
-      message: 'Server error creating demo booking' 
+    res.status(500).json({
+      success: false,
+      message: 'Server error creating demo booking'
     })
   }
 }
@@ -186,9 +184,9 @@ const getDemoBookings = async (req, res) => {
 
     if (error) {
       console.error('Get demo bookings error:', error)
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Error fetching demo bookings' 
+      return res.status(500).json({
+        success: false,
+        message: 'Error fetching demo bookings'
       })
     }
 
@@ -205,9 +203,9 @@ const getDemoBookings = async (req, res) => {
 
   } catch (error) {
     console.error('Get demo bookings error:', error)
-    res.status(500).json({ 
-      success: false, 
-      message: 'Error fetching demo bookings' 
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching demo bookings'
     })
   }
 }
@@ -223,9 +221,9 @@ const getDemoBookingById = async (req, res) => {
       .single()
 
     if (error || !booking) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Demo booking not found' 
+      return res.status(404).json({
+        success: false,
+        message: 'Demo booking not found'
       })
     }
 
@@ -236,9 +234,9 @@ const getDemoBookingById = async (req, res) => {
 
   } catch (error) {
     console.error('Get demo booking error:', error)
-    res.status(500).json({ 
-      success: false, 
-      message: 'Error fetching demo booking' 
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching demo booking'
     })
   }
 }
@@ -249,9 +247,9 @@ const updateDemoBookingStatus = async (req, res) => {
     const { status, notes } = req.body
 
     if (!status || !['submitted', 'meeting_due', 'completed', 'cancelled'].includes(status)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Valid status is required' 
+      return res.status(400).json({
+        success: false,
+        message: 'Valid status is required'
       })
     }
 
@@ -269,9 +267,9 @@ const updateDemoBookingStatus = async (req, res) => {
 
     if (error) {
       console.error('Update demo booking error:', error)
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Error updating demo booking' 
+      return res.status(500).json({
+        success: false,
+        message: 'Error updating demo booking'
       })
     }
 
@@ -283,9 +281,9 @@ const updateDemoBookingStatus = async (req, res) => {
 
   } catch (error) {
     console.error('Update demo booking error:', error)
-    res.status(500).json({ 
-      success: false, 
-      message: 'Error updating demo booking' 
+    res.status(500).json({
+      success: false,
+      message: 'Error updating demo booking'
     })
   }
 }
@@ -301,9 +299,9 @@ const deleteDemoBooking = async (req, res) => {
 
     if (error) {
       console.error('Delete demo booking error:', error)
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Error deleting demo booking' 
+      return res.status(500).json({
+        success: false,
+        message: 'Error deleting demo booking'
       })
     }
 
@@ -314,9 +312,9 @@ const deleteDemoBooking = async (req, res) => {
 
   } catch (error) {
     console.error('Delete demo booking error:', error)
-    res.status(500).json({ 
-      success: false, 
-      message: 'Error deleting demo booking' 
+    res.status(500).json({
+      success: false,
+      message: 'Error deleting demo booking'
     })
   }
 }
@@ -336,9 +334,9 @@ const getUpcomingDemos = async (req, res) => {
 
     if (error) {
       console.error('Get upcoming demos error:', error)
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Error fetching upcoming demos' 
+      return res.status(500).json({
+        success: false,
+        message: 'Error fetching upcoming demos'
       })
     }
 
@@ -349,9 +347,9 @@ const getUpcomingDemos = async (req, res) => {
 
   } catch (error) {
     console.error('Get upcoming demos error:', error)
-    res.status(500).json({ 
-      success: false, 
-      message: 'Error fetching upcoming demos' 
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching upcoming demos'
     })
   }
 }

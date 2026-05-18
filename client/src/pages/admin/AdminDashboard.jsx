@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { 
-  FaUser, FaPhone, FaEnvelope, FaCalendar, FaClock, 
+import {
+  FaUser, FaPhone, FaEnvelope, FaCalendar, FaClock,
   FaStar, FaEdit, FaTrash, FaEye, FaChartLine,
   FaMoneyBill, FaUsers, FaFileAlt, FaVideo,
   FaSignOutAlt, FaBars, FaTimes, FaSearch,
@@ -15,32 +15,32 @@ import api from '../../utils/api'
 
 const AdminDashboard = () => {
   const navigate = useNavigate()
-const [sidebarOpen, setSidebarOpen] = useState(() => {
-  return window.innerWidth >= 1024
-})  
-// Add this right after the sidebarOpen state:
-const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    return window.innerWidth >= 1024
+  })
+  // Add this right after the sidebarOpen state:
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
-// Add this useEffect for responsive behavior:
-useEffect(() => {
-  const handleResize = () => {
-    const width = window.innerWidth
-    setWindowWidth(width)
-    
-    // Auto-open on desktop, auto-close on mobile
-    if (width >= 1024) {
-      setSidebarOpen(true)
-    } else {
-      setSidebarOpen(false)
+  // Add this useEffect for responsive behavior:
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth
+      setWindowWidth(width)
+
+      // Auto-open on desktop, auto-close on mobile
+      if (width >= 1024) {
+        setSidebarOpen(true)
+      } else {
+        setSidebarOpen(false)
+      }
     }
-  }
-  
-  window.addEventListener('resize', handleResize)
-  // Initial check
-  handleResize()
-  
-  return () => window.removeEventListener('resize', handleResize)
-}, [])
+
+    window.addEventListener('resize', handleResize)
+    // Initial check
+    handleResize()
+
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const [activeTab, setActiveTab] = useState('dashboard')
   const [consultations, setConsultations] = useState([])
@@ -281,7 +281,7 @@ useEffect(() => {
       ...blogFormData,
       [name]: type === 'checkbox' ? checked : value
     })
-    
+
     // Update preview if image_url changes
     if (name === 'image_url') {
       setImagePreview(value)
@@ -290,10 +290,10 @@ useEffect(() => {
 
   const handleBlogSubmit = async (e) => {
     e.preventDefault()
-    
+
     try {
       const tagsArray = blogFormData.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
-      
+
       const blogData = {
         title: blogFormData.title,
         excerpt: blogFormData.excerpt,
@@ -339,7 +339,7 @@ useEffect(() => {
       })
       setImagePreview('')
       fetchDashboardData()
-      
+
     } catch (error) {
       console.error('Blog save error:', error.response?.data || error)
       toast.error(error.response?.data?.message || 'Error saving blog')
@@ -388,70 +388,70 @@ useEffect(() => {
     })
   }
 
-const handleTestimonialSubmit = async (e) => {
-  e.preventDefault()
-  
-  console.log('Submitting testimonial data:', testimonialFormData)
-  
-  try {
-    const testimonialData = {
-      name: testimonialFormData.name,
-      youtube_url: testimonialFormData.youtube_url && testimonialFormData.youtube_url.trim() !== '' 
-        ? testimonialFormData.youtube_url 
-        : null,
-      description: testimonialFormData.description,
-      rating: parseInt(testimonialFormData.rating),
-      location: testimonialFormData.location,
-      is_featured: testimonialFormData.is_featured,
-      status: testimonialFormData.status
+  const handleTestimonialSubmit = async (e) => {
+    e.preventDefault()
+
+    console.log('Submitting testimonial data:', testimonialFormData)
+
+    try {
+      const testimonialData = {
+        name: testimonialFormData.name,
+        youtube_url: testimonialFormData.youtube_url && testimonialFormData.youtube_url.trim() !== ''
+          ? testimonialFormData.youtube_url
+          : null,
+        description: testimonialFormData.description,
+        rating: parseInt(testimonialFormData.rating),
+        location: testimonialFormData.location,
+        is_featured: testimonialFormData.is_featured,
+        status: testimonialFormData.status
+      }
+
+      console.log('Sending data to API:', testimonialData)
+
+      let response
+      if (editingTestimonial) {
+        response = await api.put(`/testimonials/${editingTestimonial.id}`, testimonialData)
+      } else {
+        response = await api.post('/testimonials', testimonialData)
+      }
+
+      console.log('API Response:', response.data)
+
+      if (response.data.success) {
+        toast.success(editingTestimonial ? 'Testimonial updated successfully' : 'Testimonial created successfully')
+        setEditingTestimonial(null)
+        setShowTestimonialForm(false)
+        setTestimonialFormData({
+          name: '',
+          youtube_url: '',
+          description: '',
+          rating: 5,
+          location: 'India',
+          is_featured: false,
+          status: 'active'
+        })
+        fetchDashboardData()
+      }
+
+    } catch (error) {
+      console.error('Testimonial submission error:', error.response?.data || error)
+      toast.error(error.response?.data?.message || 'Error saving testimonial')
     }
-
-    console.log('Sending data to API:', testimonialData)
-
-    let response
-    if (editingTestimonial) {
-      response = await api.put(`/testimonials/${editingTestimonial.id}`, testimonialData)
-    } else {
-      response = await api.post('/testimonials', testimonialData)
-    }
-
-    console.log('API Response:', response.data)
-
-    if (response.data.success) {
-      toast.success(editingTestimonial ? 'Testimonial updated successfully' : 'Testimonial created successfully')
-      setEditingTestimonial(null)
-      setShowTestimonialForm(false)
-      setTestimonialFormData({
-        name: '',
-        youtube_url: '',
-        description: '',
-        rating: 5,
-        location: 'India',
-        is_featured: false,
-        status: 'active'
-      })
-      fetchDashboardData()
-    }
-    
-  } catch (error) {
-    console.error('Testimonial submission error:', error.response?.data || error)
-    toast.error(error.response?.data?.message || 'Error saving testimonial')
   }
-}
 
-const handleEditTestimonial = (testimonial) => {
-  setEditingTestimonial(testimonial)
-  setTestimonialFormData({
-    name: testimonial.name,
-    youtube_url: testimonial.youtube_url || '',
-    description: testimonial.description || '',
-    rating: testimonial.rating || 5,
-    location: testimonial.location || 'India',
-    is_featured: testimonial.is_featured || false,
-    status: testimonial.status || 'active'
-  })
-  setShowTestimonialForm(true)
-}
+  const handleEditTestimonial = (testimonial) => {
+    setEditingTestimonial(testimonial)
+    setTestimonialFormData({
+      name: testimonial.name,
+      youtube_url: testimonial.youtube_url || '',
+      description: testimonial.description || '',
+      rating: testimonial.rating || 5,
+      location: testimonial.location || 'India',
+      is_featured: testimonial.is_featured || false,
+      status: testimonial.status || 'active'
+    })
+    setShowTestimonialForm(true)
+  }
 
   const filteredBlogs = blogs.filter(blog =>
     blog.title.toLowerCase().includes(blogSearchTerm.toLowerCase()) ||
@@ -467,11 +467,11 @@ const handleEditTestimonial = (testimonial) => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <button
-  onClick={() => setSidebarOpen(!sidebarOpen)}
-  className="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 lg:hidden"
->
-  {sidebarOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
-</button>
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 lg:hidden"
+              >
+                {sidebarOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+              </button>
 
               <div className="ml-4 flex items-center">
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
@@ -499,89 +499,86 @@ const handleEditTestimonial = (testimonial) => {
       </nav>
 
       <div className="flex pt-16">
-    {/* Sidebar - Fixed */}
-<motion.aside
-  initial={false}
-  animate={{ 
-    x: windowWidth >= 1024 ? 0 : (sidebarOpen ? 0 : -300)
-  }}
-  className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
-    windowWidth >= 1024 ? 'translate-x-0' : ''
-  }`}
-  style={{ 
-    top: '64px', 
-    height: 'calc(100vh - 64px)'
-  }}
->
-  <div className="h-full flex flex-col">
-    {/* Navigation Items - Scrollable */}
-    <div className="flex-1 overflow-y-auto p-4">
-      <nav className="space-y-1">
-        {[
-          { id: 'dashboard', label: 'Dashboard', icon: FaChartLine },
-          { id: 'consultations', label: 'Consultations', icon: FaUsers },
-          { id: 'demo-bookings', label: 'Demo Bookings', icon: FaCalendar },
-          { id: 'kundli-requests', label: 'Kundli Requests', icon: FaFileAlt },
-          { id: 'blogs', label: 'Blogs', icon: FaEdit },
-          { id: 'testimonials', label: 'Testimonials', icon: FaVideo },
-        ].map((item) => (
-          <button
-            key={item.id}
-            onClick={() => {
-              setActiveTab(item.id)
-              if (windowWidth < 1024) {
-                setSidebarOpen(false)
-              }
-            }}
-            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-              activeTab === item.id
-                ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white'
-                : 'text-gray-600 hover:bg-gray-100'
+        {/* Sidebar - Fixed */}
+        <motion.aside
+          initial={false}
+          animate={{
+            x: windowWidth >= 1024 ? 0 : (sidebarOpen ? 0 : -300)
+          }}
+          className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${windowWidth >= 1024 ? 'translate-x-0' : ''
             }`}
-          >
-            <item.icon />
-            <span className="font-medium">{item.label}</span>
-          </button>
-        ))}
-      </nav>
-    </div>
+          style={{
+            top: '64px',
+            height: 'calc(100vh - 64px)'
+          }}
+        >
+          <div className="h-full flex flex-col">
+            {/* Navigation Items - Scrollable */}
+            <div className="flex-1 overflow-y-auto p-4">
+              <nav className="space-y-1">
+                {[
+                  { id: 'dashboard', label: 'Dashboard', icon: FaChartLine },
+                  { id: 'consultations', label: 'Consultations', icon: FaUsers },
+                  { id: 'demo-bookings', label: 'Demo Bookings', icon: FaCalendar },
+                  { id: 'kundli-requests', label: 'Kundli Requests', icon: FaFileAlt },
+                  { id: 'blogs', label: 'Blogs', icon: FaEdit },
+                  { id: 'testimonials', label: 'Testimonials', icon: FaVideo },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setActiveTab(item.id)
+                      if (windowWidth < 1024) {
+                        setSidebarOpen(false)
+                      }
+                    }}
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${activeTab === item.id
+                        ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white'
+                        : 'text-gray-600 hover:bg-gray-100'
+                      }`}
+                  >
+                    <item.icon />
+                    <span className="font-medium">{item.label}</span>
+                  </button>
+                ))}
+              </nav>
+            </div>
 
-    {/* Fixed Logout Button at Bottom */}
-    <div className="p-4 border-t bg-white">
-      <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold">
-            {user?.username?.charAt(0).toUpperCase() || 'A'}
+            {/* Fixed Logout Button at Bottom */}
+            <div className="p-4 border-t bg-white">
+              <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold">
+                    {user?.username?.charAt(0).toUpperCase() || 'A'}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-800">{user?.username || 'Admin'}</p>
+                    <p className="text-xs text-gray-500 capitalize">{user?.role || 'Admin'}</p>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center justify-center space-x-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors border border-red-100"
+              >
+                <FaSignOutAlt />
+                <span className="font-medium">Logout</span>
+              </button>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-semibold text-gray-800">{user?.username || 'Admin'}</p>
-            <p className="text-xs text-gray-500 capitalize">{user?.role || 'Admin'}</p>
-          </div>
-        </div>
-      </div>
-      <button
-        onClick={handleLogout}
-        className="w-full flex items-center justify-center space-x-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors border border-red-100"
-      >
-        <FaSignOutAlt />
-        <span className="font-medium">Logout</span>
-      </button>
-    </div>
-  </div>
-</motion.aside>
+        </motion.aside>
 
         {/* Overlay for mobile */}
         {sidebarOpen && window.innerWidth < 1024 && (
-          <div 
+          <div
             className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
             onClick={() => setSidebarOpen(false)}
           />
         )}
 
         {/* Main Content */}
-<main className={`flex-1 p-4 lg:p-6 overflow-x-auto transition-all duration-300 ${
-  sidebarOpen && windowWidth >= 1024 ? 'lg:ml-128' : ''
-}`}>          {/* Dashboard Tab */}
+        <main className={`flex-1 p-4 lg:p-6 overflow-x-auto transition-all duration-300 ${sidebarOpen && windowWidth >= 1024 ? 'lg:ml-128' : ''
+          }`}>          {/* Dashboard Tab */}
           {activeTab === 'dashboard' && (
             <div className="space-y-6">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -657,12 +654,11 @@ const handleEditTestimonial = (testimonial) => {
                             </td>
                             <td className="py-3 px-2 lg:px-4 font-medium text-sm lg:text-base">{item.name}</td>
                             <td className="py-3 px-2 lg:px-4">
-                              <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                                item.status === 'completed' ? 'bg-green-100 text-green-800' :
-                                item.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                item.status === 'payment_pending' ? 'bg-red-100 text-red-800' :
-                                'bg-blue-100 text-blue-800'
-                              }`}>
+                              <span className={`px-2 py-1 rounded-full text-xs font-semibold ${item.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                  item.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                    item.status === 'payment_pending' ? 'bg-red-100 text-red-800' :
+                                      'bg-blue-100 text-blue-800'
+                                }`}>
                                 {item.status?.replace('_', ' ') || 'pending'}
                               </span>
                             </td>
@@ -680,7 +676,7 @@ const handleEditTestimonial = (testimonial) => {
 
           {/* Consultations Tab */}
           {activeTab === 'consultations' && (
-            <ConsultationsTable 
+            <ConsultationsTable
               data={consultations}
               loading={loading}
               onRefresh={fetchDashboardData}
@@ -691,7 +687,7 @@ const handleEditTestimonial = (testimonial) => {
 
           {/* Demo Bookings Tab */}
           {activeTab === 'demo-bookings' && (
-            <DemoBookingsTable 
+            <DemoBookingsTable
               data={demoBookings}
               loading={loading}
               onUpdateStatus={updateDemoStatus}
@@ -701,7 +697,7 @@ const handleEditTestimonial = (testimonial) => {
 
           {/* Kundli Requests Tab */}
           {activeTab === 'kundli-requests' && (
-            <KundliRequestsTable 
+            <KundliRequestsTable
               data={kundliRequests}
               loading={loading}
               onUpdateStatus={updateKundliStatus}
@@ -770,8 +766,8 @@ const handleEditTestimonial = (testimonial) => {
                       {/* Blog Image */}
                       <div className="h-48 overflow-hidden">
                         {blog.image_url ? (
-                          <img 
-                            src={blog.image_url} 
+                          <img
+                            src={blog.image_url}
                             alt={blog.title}
                             className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
                             onError={(e) => {
@@ -807,11 +803,10 @@ const handleEditTestimonial = (testimonial) => {
                                 Featured
                               </span>
                             )}
-                            <span className={`px-2 py-1 text-xs rounded-full ${
-                              blog.published 
-                                ? 'bg-green-100 text-green-800' 
+                            <span className={`px-2 py-1 text-xs rounded-full ${blog.published
+                                ? 'bg-green-100 text-green-800'
                                 : 'bg-gray-100 text-gray-800'
-                            }`}>
+                              }`}>
                               {blog.published ? 'Published' : 'Draft'}
                             </span>
                           </div>
@@ -824,8 +819,8 @@ const handleEditTestimonial = (testimonial) => {
                         {/* Tags */}
                         <div className="flex flex-wrap gap-1 mb-4">
                           {blog.tags?.slice(0, 3).map((tag) => (
-                            <span 
-                              key={tag} 
+                            <span
+                              key={tag}
                               className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded"
                             >
                               {tag}
@@ -864,7 +859,7 @@ const handleEditTestimonial = (testimonial) => {
 
           {/* Testimonials Tab */}
           {activeTab === 'testimonials' && (
-            <TestimonialsManagement 
+            <TestimonialsManagement
               testimonials={testimonials}
               loading={loading}
               onDelete={handleDeleteTestimonial}
@@ -966,14 +961,14 @@ const handleEditTestimonial = (testimonial) => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <FaImage className="inline mr-2" /> Featured Image
                   </label>
-                  
+
                   {/* Image Preview */}
                   {(imagePreview || blogFormData.image_url) && (
                     <div className="mb-4">
                       <div className="relative">
-                        <img 
-                          src={imagePreview || blogFormData.image_url} 
-                          alt="Preview" 
+                        <img
+                          src={imagePreview || blogFormData.image_url}
+                          alt="Preview"
                           className="w-full h-48 object-cover rounded-lg border"
                           onError={(e) => {
                             e.target.onerror = null
@@ -1002,7 +997,7 @@ const handleEditTestimonial = (testimonial) => {
                       )}
                     </div>
                   )}
-                  
+
                   {/* Upload Options */}
                   <div className="space-y-4">
                     {/* Upload via File */}
@@ -1030,11 +1025,10 @@ const handleEditTestimonial = (testimonial) => {
                         />
                         <label
                           htmlFor="blog-image-upload"
-                          className={`flex flex-col items-center justify-center px-4 py-6 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
-                            uploadingImage 
-                              ? 'bg-gray-100 border-gray-300' 
+                          className={`flex flex-col items-center justify-center px-4 py-6 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${uploadingImage
+                              ? 'bg-gray-100 border-gray-300'
                               : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'
-                          }`}
+                            }`}
                         >
                           {uploadingImage ? (
                             <>
@@ -1251,39 +1245,39 @@ const handleEditTestimonial = (testimonial) => {
                 </div>
 
                 {/* YouTube URL */}
-<div>
-  <label className="block text-sm font-medium text-gray-700 mb-1">
-    <FaVideo className="inline mr-2" /> YouTube URL (Optional)
-  </label>
-  <input
-    type="url"
-    name="youtube_url"
-    value={testimonialFormData.youtube_url}
-    onChange={handleTestimonialInputChange}
-    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-    placeholder="https://www.youtube.com/watch?v=VIDEO_ID (optional)"
-  />
-  {testimonialFormData.youtube_url && testimonialFormData.youtube_url.trim() !== '' && (
-    <div className="mt-2 p-2 bg-gray-50 rounded">
-      <p className="text-sm text-gray-600">
-        Video ID: {extractVideoId(testimonialFormData.youtube_url) || 'Invalid URL'}
-      </p>
-      {extractVideoId(testimonialFormData.youtube_url) && (
-        <div className="mt-2 relative pb-[56.25%]">
-          <iframe
-            src={`https://www.youtube.com/embed/${extractVideoId(testimonialFormData.youtube_url)}`}
-            className="absolute top-0 left-0 w-full h-full rounded"
-            title="Preview"
-            allowFullScreen
-          />
-        </div>
-      )}
-    </div>
-  )}
-  <p className="mt-1 text-xs text-gray-500">
-    Leave empty if you only want to show text testimonial
-  </p>
-</div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <FaVideo className="inline mr-2" /> YouTube URL (Optional)
+                  </label>
+                  <input
+                    type="url"
+                    name="youtube_url"
+                    value={testimonialFormData.youtube_url}
+                    onChange={handleTestimonialInputChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="https://www.youtube.com/watch?v=VIDEO_ID (optional)"
+                  />
+                  {testimonialFormData.youtube_url && testimonialFormData.youtube_url.trim() !== '' && (
+                    <div className="mt-2 p-2 bg-gray-50 rounded">
+                      <p className="text-sm text-gray-600">
+                        Video ID: {extractVideoId(testimonialFormData.youtube_url) || 'Invalid URL'}
+                      </p>
+                      {extractVideoId(testimonialFormData.youtube_url) && (
+                        <div className="mt-2 relative pb-[56.25%]">
+                          <iframe
+                            src={`https://www.youtube.com/embed/${extractVideoId(testimonialFormData.youtube_url)}`}
+                            className="absolute top-0 left-0 w-full h-full rounded"
+                            title="Preview"
+                            allowFullScreen
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  <p className="mt-1 text-xs text-gray-500">
+                    Leave empty if you only want to show text testimonial
+                  </p>
+                </div>
                 {/* Description */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -1310,7 +1304,7 @@ const handleEditTestimonial = (testimonial) => {
                       <button
                         key={star}
                         type="button"
-                        onClick={() => setTestimonialFormData({...testimonialFormData, rating: star})}
+                        onClick={() => setTestimonialFormData({ ...testimonialFormData, rating: star })}
                         className={`text-2xl ${star <= testimonialFormData.rating ? 'text-yellow-500' : 'text-gray-300'}`}
                       >
                         <FaStar />
@@ -1418,7 +1412,7 @@ const ConsultationsTable = ({ data, loading, onRefresh, onUpdateStatus, onDelete
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-6">
         <h2 className="text-xl font-bold">Consultations</h2>
         <div className="flex flex-col sm:flex-row gap-3">
-          <button 
+          <button
             onClick={onRefresh}
             className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm transition-colors"
           >
@@ -1426,7 +1420,7 @@ const ConsultationsTable = ({ data, loading, onRefresh, onUpdateStatus, onDelete
           </button>
         </div>
       </div>
-      
+
       {loading ? (
         <div className="text-center py-12">Loading...</div>
       ) : localData.length === 0 ? (
@@ -1440,8 +1434,7 @@ const ConsultationsTable = ({ data, loading, onRefresh, onUpdateStatus, onDelete
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Contact</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Amount</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Status</th>
-                <th className="text-left py-3 px-2 lg:px-4 text-sm">DOB & Gender</th>
-                <th className="text-left py-3 px-2 lg:px-4 text-sm">Birth Time & Place</th>
+                <th className="text-left py-3 px-2 lg:px-4 text-sm">Date of Birth & Gender</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Date</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Actions</th>
               </tr>
@@ -1458,7 +1451,7 @@ const ConsultationsTable = ({ data, loading, onRefresh, onUpdateStatus, onDelete
                   <td className="py-3 px-2 lg:px-4 text-sm">{consultation.phone}</td>
                   <td className="py-3 px-2 lg:px-4 font-semibold text-sm lg:text-base">₹{consultation.amount || 0}</td>
                   <td className="py-3 px-2 lg:px-4">
-                    <select 
+                    <select
                       value={consultation.status || 'payment_pending'}
                       onChange={(e) => handleStatusChange(consultation.id, e.target.value)}
                       className="px-2 py-1 rounded-full text-xs font-semibold border w-full max-w-[150px]"
@@ -1471,29 +1464,19 @@ const ConsultationsTable = ({ data, loading, onRefresh, onUpdateStatus, onDelete
                     </select>
                   </td>
                   <td className="py-3 px-2 lg:px-4">
-  <div>
-    <p className="text-xs text-gray-500">
-      {consultation.dob ? new Date(consultation.dob).toLocaleDateString() : 'N/A'} • 
-      {consultation.gender ? ` ${consultation.gender.charAt(0).toUpperCase() + consultation.gender.slice(1)}` : ''}
-    </p>
-  </div>
-</td>
-                  <td className="py-3 px-2 lg:px-4">
-  <div>
-    <p className="text-xs text-gray-700 font-medium">
-      {consultation.birth_time ? consultation.birth_time : <span className="text-gray-400 italic">Time not provided</span>}
-    </p>
-    <p className="text-xs text-gray-500 mt-0.5">
-      {consultation.birth_place ? consultation.birth_place : <span className="italic">Place not provided</span>}
-    </p>
-  </div>
-</td>
+                    <div>
+                      <p className="text-xs text-gray-500">
+                        {consultation.dob ? new Date(consultation.dob).toLocaleDateString() : 'N/A'} •
+                        {consultation.gender ? ` ${consultation.gender.charAt(0).toUpperCase() + consultation.gender.slice(1)}` : ''}
+                      </p>
+                    </div>
+                  </td>
                   <td className="py-3 px-2 lg:px-4 text-gray-500 text-sm">
                     {new Date(consultation.created_at).toLocaleDateString()}
                   </td>
                   <td className="py-3 px-2 lg:px-4">
                     <div className="flex space-x-1">
-                      <button 
+                      <button
                         onClick={() => onDelete(consultation.id)}
                         className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
                       >
@@ -1535,8 +1518,7 @@ const DemoBookingsTable = ({ data, loading, onUpdateStatus, onDelete }) => {
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Name</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Contact</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Date & Time</th>
-                <th className="text-left py-3 px-2 lg:px-4 text-sm">DOB & Gender</th>
-                <th className="text-left py-3 px-2 lg:px-4 text-sm">Birth Time & Place</th>
+                <th className="text-left py-3 px-2 lg:px-4 text-sm">Date of Birth & Gender</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Status</th>
                 <th className="text-left py-3 px-2 lg:px-4 text-sm">Actions</th>
               </tr>
@@ -1552,29 +1534,19 @@ const DemoBookingsTable = ({ data, loading, onUpdateStatus, onDelete }) => {
                   </td>
                   <td className="py-3 px-2 lg:px-4 text-sm">{booking.phone}</td>
                   <td className="py-3 px-2 lg:px-4 text-sm">
-                    {booking.date ? new Date(booking.date).toLocaleDateString() : 'N/A'} 
+                    {booking.date ? new Date(booking.date).toLocaleDateString() : 'N/A'}
                     {booking.time && ` at ${booking.time}`}
                   </td>
                   <td className="py-3 px-2 lg:px-4 text-sm">
-  <div>
-    <p className="text-xs text-gray-500">
-      {booking.dob ? new Date(booking.dob).toLocaleDateString() : 'N/A'} • 
-      {booking.gender ? ` ${booking.gender.charAt(0).toUpperCase() + booking.gender.slice(1)}` : ''}
-    </p>
-  </div>
-</td>
+                    <div>
+                      <p className="text-xs text-gray-500">
+                        {booking.dob ? new Date(booking.dob).toLocaleDateString() : 'N/A'} •
+                        {booking.gender ? ` ${booking.gender.charAt(0).toUpperCase() + booking.gender.slice(1)}` : ''}
+                      </p>
+                    </div>
+                  </td>
                   <td className="py-3 px-2 lg:px-4">
-  <div>
-    <p className="text-xs text-gray-700 font-medium">
-      {booking.birth_time ? booking.birth_time : <span className="text-gray-400 italic">Time not provided</span>}
-    </p>
-    <p className="text-xs text-gray-500 mt-0.5">
-      {booking.birth_place ? booking.birth_place : <span className="italic">Place not provided</span>}
-    </p>
-  </div>
-</td>
-                  <td className="py-3 px-2 lg:px-4">
-                    <select 
+                    <select
                       value={booking.status || 'submitted'}
                       onChange={(e) => handleStatusChange(booking.id, e.target.value)}
                       className="px-2 py-1 rounded-full text-xs font-semibold border w-full max-w-[150px]"
@@ -1588,7 +1560,7 @@ const DemoBookingsTable = ({ data, loading, onUpdateStatus, onDelete }) => {
                   </td>
                   <td className="py-3 px-2 lg:px-4">
                     <div className="flex flex-col sm:flex-row gap-1">
-                      <button 
+                      <button
                         onClick={() => onDelete(booking.id)}
                         className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
                       >
@@ -1655,7 +1627,7 @@ const KundliRequestsTable = ({ data, loading, onUpdateStatus, onDelete }) => {
                   </td>
                   <td className="py-3 px-2 lg:px-4 font-semibold text-sm lg:text-base">₹{request.amount || 0}</td>
                   <td className="py-3 px-2 lg:px-4">
-                    <select 
+                    <select
                       value={request.status || 'payment_pending'}
                       onChange={(e) => handleStatusChange(request.id, e.target.value)}
                       className="px-2 py-1 rounded-full text-xs font-semibold border w-full max-w-[150px]"
@@ -1672,7 +1644,7 @@ const KundliRequestsTable = ({ data, loading, onUpdateStatus, onDelete }) => {
                   </td>
                   <td className="py-3 px-2 lg:px-4">
                     <div className="flex space-x-1">
-                      <button 
+                      <button
                         onClick={() => onDelete(request.id)}
                         className="p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
                       >
@@ -1695,7 +1667,7 @@ const TestimonialsManagement = ({ testimonials, loading, onDelete, onEdit, onAdd
     <div className="bg-white rounded-xl shadow-lg p-4 lg:p-6">
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4 mb-6">
         <h2 className="text-xl font-bold">Testimonials Management</h2>
-        <button 
+        <button
           onClick={onAddNew}
           className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:opacity-90 text-sm flex items-center space-x-2 transition-opacity"
         >
@@ -1703,7 +1675,7 @@ const TestimonialsManagement = ({ testimonials, loading, onDelete, onEdit, onAdd
           <span>Add New Testimonial</span>
         </button>
       </div>
-      
+
       {loading ? (
         <div className="text-center py-12">Loading...</div>
       ) : testimonials.length === 0 ? (
@@ -1713,7 +1685,7 @@ const TestimonialsManagement = ({ testimonials, loading, onDelete, onEdit, onAdd
           {testimonials.map((testimonial) => {
             const videoId = testimonial.youtube_url ? extractVideoId(testimonial.youtube_url) : null
             const hasVideo = !!videoId
-            
+
             return (
               <div key={testimonial.id} className="border rounded-xl p-4 hover:shadow-lg transition-shadow bg-white">
                 <div className="flex justify-between items-start mb-3">
@@ -1736,7 +1708,7 @@ const TestimonialsManagement = ({ testimonials, loading, onDelete, onEdit, onAdd
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Video Preview - Only show if video exists */}
                 {hasVideo ? (
                   <div className="mb-3">
@@ -1766,7 +1738,7 @@ const TestimonialsManagement = ({ testimonials, loading, onDelete, onEdit, onAdd
                     </span>
                   </div>
                 )}
-                
+
                 {/* Testimonial Text - Always show */}
                 <div className="mb-4">
                   <div className="flex items-start mb-2">
@@ -1776,33 +1748,32 @@ const TestimonialsManagement = ({ testimonials, loading, onDelete, onEdit, onAdd
                     </p>
                   </div>
                   {testimonial.description?.length > 150 && (
-                    <button 
-                      onClick={() => {}}
+                    <button
+                      onClick={() => { }}
                       className="text-xs text-blue-600 hover:text-blue-800"
                     >
                       Read more
                     </button>
                   )}
                 </div>
-                
+
                 {/* Status and Actions */}
                 <div className="flex justify-between items-center pt-3 border-t">
-                  <span className={`px-2 py-1 rounded-full text-xs ${
-                    testimonial.status === 'active' ? 'bg-green-100 text-green-800' :
-                    testimonial.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}>
+                  <span className={`px-2 py-1 rounded-full text-xs ${testimonial.status === 'active' ? 'bg-green-100 text-green-800' :
+                      testimonial.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-gray-100 text-gray-800'
+                    }`}>
                     {testimonial.status || 'active'}
                   </span>
                   <div className="flex space-x-2">
-                    <button 
+                    <button
                       onClick={() => onEdit(testimonial)}
                       className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                       title="Edit testimonial"
                     >
                       <FaEdit className="w-4 h-4" />
                     </button>
-                    <button 
+                    <button
                       onClick={() => onDelete(testimonial.id)}
                       className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                       title="Delete testimonial"

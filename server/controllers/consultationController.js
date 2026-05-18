@@ -11,40 +11,40 @@ const razorpay = new Razorpay({
 
 const createConsultation = async (req, res) => {
   try {
-    const { name, email, phone, dob, gender, birth_time, birth_place } = req.body
+    const { name, email, phone, dob, gender } = req.body
 
     // Validate required fields
     if (!name || !email || !phone || !dob || !gender) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'All fields are required' 
+      return res.status(400).json({
+        success: false,
+        message: 'All fields are required'
       })
     }
 
     // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Invalid email format' 
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid email format'
       })
     }
 
     // Validate phone number format
     const phoneRegex = /^[0-9]{10}$/
     if (!phoneRegex.test(phone)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Phone number must be 10 digits' 
+      return res.status(400).json({
+        success: false,
+        message: 'Phone number must be 10 digits'
       })
     }
 
     // Validate gender
     const validGenders = ['male', 'female', 'other', 'prefer_not_to_say']
     if (!validGenders.includes(gender)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Invalid gender selection' 
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid gender selection'
       })
     }
 
@@ -53,26 +53,26 @@ const createConsultation = async (req, res) => {
     const today = new Date()
     let age = today.getFullYear() - dobDate.getFullYear()
     const monthDiff = today.getMonth() - dobDate.getMonth()
-    
+
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
       age--
     }
-    
+
     if (age < 18) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'You must be at least 18 years old' 
+      return res.status(400).json({
+        success: false,
+        message: 'You must be at least 18 years old'
       })
     }
 
     // Validate date of birth range (100 years max)
     const minDate = new Date()
     minDate.setFullYear(minDate.getFullYear() - 100)
-    
+
     if (dobDate < minDate || dobDate > today) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Invalid date of birth' 
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid date of birth'
       })
     }
 
@@ -95,8 +95,6 @@ const createConsultation = async (req, res) => {
       phone,
       dob,
       gender,
-      birth_time: birth_time || null,
-      birth_place: birth_place || null,
       amount: 600,
       razorpay_order_id: razorpayOrder.id,
       status: 'payment_pending'
@@ -110,9 +108,9 @@ const createConsultation = async (req, res) => {
 
     if (error) {
       console.error('Consultation creation error:', error)
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Error creating consultation' 
+      return res.status(500).json({
+        success: false,
+        message: 'Error creating consultation'
       })
     }
 
@@ -127,9 +125,9 @@ const createConsultation = async (req, res) => {
 
   } catch (error) {
     console.error('Create consultation error:', error)
-    res.status(500).json({ 
-      success: false, 
-      message: 'Server error creating consultation' 
+    res.status(500).json({
+      success: false,
+      message: 'Server error creating consultation'
     })
   }
 }
@@ -139,9 +137,9 @@ const verifyPayment = async (req, res) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, consultationId } = req.body
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature || !consultationId) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Missing payment verification details' 
+      return res.status(400).json({
+        success: false,
+        message: 'Missing payment verification details'
       })
     }
 
@@ -153,9 +151,9 @@ const verifyPayment = async (req, res) => {
       .digest('hex')
 
     if (expectedSignature !== razorpay_signature) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Invalid payment signature' 
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid payment signature'
       })
     }
 
@@ -174,9 +172,9 @@ const verifyPayment = async (req, res) => {
 
     if (error) {
       console.error('Consultation update error:', error)
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Error updating consultation' 
+      return res.status(500).json({
+        success: false,
+        message: 'Error updating consultation'
       })
     }
 
@@ -188,9 +186,9 @@ const verifyPayment = async (req, res) => {
 
   } catch (error) {
     console.error('Payment verification error:', error)
-    res.status(500).json({ 
-      success: false, 
-      message: 'Error verifying payment' 
+    res.status(500).json({
+      success: false,
+      message: 'Error verifying payment'
     })
   }
 }
@@ -222,9 +220,9 @@ const getConsultations = async (req, res) => {
 
     if (error) {
       console.error('Get consultations error:', error)
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Error fetching consultations' 
+      return res.status(500).json({
+        success: false,
+        message: 'Error fetching consultations'
       })
     }
 
@@ -241,9 +239,9 @@ const getConsultations = async (req, res) => {
 
   } catch (error) {
     console.error('Get consultations error:', error)
-    res.status(500).json({ 
-      success: false, 
-      message: 'Error fetching consultations' 
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching consultations'
     })
   }
 }
@@ -259,9 +257,9 @@ const getConsultationById = async (req, res) => {
       .single()
 
     if (error || !consultation) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'Consultation not found' 
+      return res.status(404).json({
+        success: false,
+        message: 'Consultation not found'
       })
     }
 
@@ -272,9 +270,9 @@ const getConsultationById = async (req, res) => {
 
   } catch (error) {
     console.error('Get consultation error:', error)
-    res.status(500).json({ 
-      success: false, 
-      message: 'Error fetching consultation' 
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching consultation'
     })
   }
 }
@@ -285,9 +283,9 @@ const updateConsultationStatus = async (req, res) => {
     const { status, notes } = req.body
 
     if (!status || !['payment_pending', 'received', 'on_the_call', 'completed', 'cancelled'].includes(status)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Valid status is required' 
+      return res.status(400).json({
+        success: false,
+        message: 'Valid status is required'
       })
     }
 
@@ -305,9 +303,9 @@ const updateConsultationStatus = async (req, res) => {
 
     if (error) {
       console.error('Update consultation error:', error)
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Error updating consultation' 
+      return res.status(500).json({
+        success: false,
+        message: 'Error updating consultation'
       })
     }
 
@@ -319,9 +317,9 @@ const updateConsultationStatus = async (req, res) => {
 
   } catch (error) {
     console.error('Update consultation error:', error)
-    res.status(500).json({ 
-      success: false, 
-      message: 'Error updating consultation' 
+    res.status(500).json({
+      success: false,
+      message: 'Error updating consultation'
     })
   }
 }
@@ -337,9 +335,9 @@ const deleteConsultation = async (req, res) => {
 
     if (error) {
       console.error('Delete consultation error:', error)
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Error deleting consultation' 
+      return res.status(500).json({
+        success: false,
+        message: 'Error deleting consultation'
       })
     }
 
@@ -350,9 +348,9 @@ const deleteConsultation = async (req, res) => {
 
   } catch (error) {
     console.error('Delete consultation error:', error)
-    res.status(500).json({ 
-      success: false, 
-      message: 'Error deleting consultation' 
+    res.status(500).json({
+      success: false,
+      message: 'Error deleting consultation'
     })
   }
 }

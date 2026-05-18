@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
-import { FaCalendarAlt, FaClock, FaUser, FaPhoneAlt, FaEnvelope, FaCheck, FaVenusMars, FaMapMarkerAlt } from 'react-icons/fa'
+import { FaCalendarAlt, FaClock, FaUser, FaPhoneAlt, FaEnvelope, FaCheck, FaVenusMars } from 'react-icons/fa'
 import api from '../utils/api'
 
 const DemoBooking = () => {
@@ -19,7 +19,7 @@ const DemoBooking = () => {
         date: selectedDate,
         time: selectedTime
       }
-      
+
       const response = await api.post('/demo-bookings', formData)
       if (response.data.success) {
         toast.success('Demo booked successfully! We will contact you soon.')
@@ -35,7 +35,7 @@ const DemoBooking = () => {
 
   // Generate time slots
   const timeSlots = [
-    '09:00', '10:00', '11:00', '12:00', 
+    '09:00', '10:00', '11:00', '12:00',
     '14:00', '15:00', '16:00', '17:00'
   ]
 
@@ -94,7 +94,7 @@ const DemoBooking = () => {
               Book Your <span className="text-amber-600">free demo consultation</span>
             </h2>
             <p className="text-gray-600 mb-8">
-              Experience the power of Vedic astrology firsthand. Schedule a free 30-minute demo session 
+              Experience the power of Vedic astrology firsthand. Schedule a free 30-minute demo session
               with our expert astrologers and discover how we can guide you towards your true potential.
             </p>
 
@@ -164,7 +164,7 @@ const DemoBooking = () => {
                 </label>
                 <input
                   type="tel"
-                  {...register('phone', { 
+                  {...register('phone', {
                     required: 'Phone number is required',
                     pattern: {
                       value: /^[0-9]{10}$/,
@@ -186,7 +186,7 @@ const DemoBooking = () => {
                 </label>
                 <input
                   type="email"
-                  {...register('email', { 
+                  {...register('email', {
                     required: 'Email is required',
                     pattern: {
                       value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -208,7 +208,7 @@ const DemoBooking = () => {
                 </label>
                 <input
                   type="date"
-                  {...register('dob', { 
+                  {...register('dob', {
                     required: 'Date of birth is required',
                     validate: {
                       minAge: (value) => {
@@ -262,35 +262,6 @@ const DemoBooking = () => {
                 )}
               </div>
 
-              {/* Birth Time (Optional) */}
-              <div>
-                <label className="form-label">
-                  <FaClock className="inline mr-2" /> Birth Time
-                  <span className="ml-2 text-xs text-gray-400 font-normal">(optional)</span>
-                </label>
-                <input
-                  type="time"
-                  {...register('birth_time')}
-                  className="form-input"
-                />
-                <p className="text-xs text-gray-400 mt-1">Leave blank if not known</p>
-              </div>
-
-              {/* Birth Place (Optional) */}
-              <div>
-                <label className="form-label">
-                  <FaMapMarkerAlt className="inline mr-2" /> Birth Place
-                  <span className="ml-2 text-xs text-gray-400 font-normal">(optional)</span>
-                </label>
-                <input
-                  type="text"
-                  {...register('birth_place')}
-                  className="form-input"
-                  placeholder="City, State, Country"
-                />
-                <p className="text-xs text-gray-400 mt-1">Leave blank if not known</p>
-              </div>
-
               {/* Demo Date Selection */}
               <div>
                 <label className="form-label">
@@ -306,11 +277,10 @@ const DemoBooking = () => {
                         key={date}
                         type="button"
                         onClick={() => handleDateSelect(date)}
-                        className={`py-3 rounded-lg border transition-all ${
-                          selectedDate === date 
-                            ? 'bg-blue-600 text-white border-blue-600' 
+                        className={`py-3 rounded-lg border transition-all ${selectedDate === date
+                            ? 'bg-blue-600 text-white border-blue-600'
                             : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'
-                        }`}
+                          }`}
                       >
                         <div className="text-sm">{day}</div>
                         <div className="font-bold text-lg">{dateNum}</div>
@@ -341,13 +311,12 @@ const DemoBooking = () => {
                       type="button"
                       onClick={() => handleTimeSelect(time)}
                       disabled={!selectedDate}
-                      className={`py-3 rounded-lg border text-center transition-all ${
-                        !selectedDate 
+                      className={`py-3 rounded-lg border text-center transition-all ${!selectedDate
                           ? 'opacity-50 cursor-not-allowed bg-gray-100'
                           : selectedTime === time
                             ? 'bg-blue-600 text-white border-blue-600'
                             : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'
-                      }`}
+                        }`}
                     >
                       <span className="font-medium">{time}</span>
                     </button>
@@ -369,11 +338,10 @@ const DemoBooking = () => {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isSubmitting || !selectedDate || !selectedTime}
-                className={`w-full py-4 rounded-lg font-bold text-white transition-all ${
-                  isSubmitting || !selectedDate || !selectedTime
+                className={`w-full py-4 rounded-lg font-bold text-white transition-all ${isSubmitting || !selectedDate || !selectedTime
                     ? 'bg-gray-400 cursor-not-allowed'
                     : 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600'
-                }`}
+                  }`}
               >
                 {isSubmitting ? 'Booking...' : 'Book Free Demo'}
               </motion.button>
