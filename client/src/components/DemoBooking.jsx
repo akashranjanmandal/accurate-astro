@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
-import { FaCalendarAlt, FaClock, FaUser, FaPhoneAlt, FaEnvelope, FaCheck, FaVenusMars } from 'react-icons/fa'
+import { FaCalendarAlt, FaClock, FaUser, FaPhoneAlt, FaEnvelope, FaCheck, FaVenusMars, FaMapMarkerAlt } from 'react-icons/fa'
 import api from '../utils/api'
 
 const DemoBooking = () => {
@@ -260,6 +260,36 @@ const DemoBooking = () => {
                 {errors.gender && (
                   <p className="text-red-500 text-sm mt-1">{errors.gender.message}</p>
                 )}
+              </div>
+
+              {/* Time of Birth (Optional) */}
+              <div>
+                <label className="form-label">
+                  <FaClock className="inline mr-2" /> Time of Birth
+                  <span className="ml-1 text-xs text-gray-400 font-normal">(optional)</span>
+                </label>
+                <input
+                  type="time"
+                  {...register('time_of_birth')}
+                  className="form-input"
+                  placeholder="HH:MM"
+                />
+                <p className="text-xs text-gray-500 mt-1">Helps provide more accurate predictions</p>
+              </div>
+
+              {/* Place of Birth (Optional) */}
+              <div>
+                <label className="form-label">
+                  <FaMapMarkerAlt className="inline mr-2" /> Place of Birth
+                  <span className="ml-1 text-xs text-gray-400 font-normal">(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  {...register('place_of_birth')}
+                  className="form-input"
+                  placeholder="City, State, Country"
+                />
+                <p className="text-xs text-gray-500 mt-1">E.g. Mumbai, Maharashtra, India</p>
               </div>
 
               {/* Demo Date Selection */}

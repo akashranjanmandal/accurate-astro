@@ -1,9 +1,10 @@
 // server/controllers/demoBookings.js
 const { supabase, supabaseAdmin } = require('../config/database')
+const { sendWhatsAppNotification } = require('../utils/whatsapp')
 
 const createDemoBooking = async (req, res) => {
   try {
-    const { name, phone, email, date, time, dob, gender } = req.body
+    const { name, phone, email, date, time, dob, gender, time_of_birth, place_of_birth } = req.body
 
     // Validate required fields
     if (!name || !phone || !date || !time || !dob || !gender) {
@@ -116,6 +117,8 @@ const createDemoBooking = async (req, res) => {
       time,
       dob,
       gender,
+      time_of_birth: time_of_birth || null,
+      place_of_birth: place_of_birth || null,
       status: 'submitted'
     }
 
@@ -132,6 +135,13 @@ const createDemoBooking = async (req, res) => {
         message: 'Error creating demo booking'
       })
     }
+
+    // Send WhatsApp notification to admin
+    const tobLine = booking.time_of_birth ? `\n⏰ Time of Birth: ${booking.time_of_birth}` : ''
+    const pobLine = booking.place_of_birth ? `\n📍 Place of Birth: ${booking.place_of_birth}` : ''
+    const emailLine = booking.email ? `\n📧 Email: ${booking.email}` : ''
+    const wpMsg = `📅 New FREE Demo Booking!\n\n👤 Name: ${booking.name}\n📞 Phone: ${booking.phone}${emailLine}\n🎂 DOB: ${booking.dob}\n🚻 Gender: ${booking.gender}${tobLine}${pobLine}\n📆 Demo Date: ${booking.date}\n🕒 Demo Time: ${booking.time}\n🆔 Booking ID: ${booking.id}`
+    sendWhatsAppNotification(wpMsg) // fire-and-forget
 
     res.json({
       success: true,

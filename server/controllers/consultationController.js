@@ -2,6 +2,7 @@
 const Razorpay = require('razorpay')
 const crypto = require('crypto')
 const { supabase, supabaseAdmin } = require('../config/database')
+// WhatsApp notification disabled for now
 
 // Initialize Razorpay
 const razorpay = new Razorpay({
@@ -11,7 +12,7 @@ const razorpay = new Razorpay({
 
 const createConsultation = async (req, res) => {
   try {
-    const { name, email, phone, dob, gender } = req.body
+    const { name, email, phone, dob, gender, time_of_birth, place_of_birth } = req.body
 
     // Validate required fields
     if (!name || !email || !phone || !dob || !gender) {
@@ -95,6 +96,8 @@ const createConsultation = async (req, res) => {
       phone,
       dob,
       gender,
+      time_of_birth: time_of_birth || null,
+      place_of_birth: place_of_birth || null,
       amount: 600,
       razorpay_order_id: razorpayOrder.id,
       status: 'payment_pending'
@@ -177,6 +180,12 @@ const verifyPayment = async (req, res) => {
         message: 'Error updating consultation'
       })
     }
+
+    // Send WhatsApp notification disabled for now
+// const tobLine = consultation.time_of_birth ? `\n⏰ Time of Birth: ${consultation.time_of_birth}` : ''
+// const pobLine = consultation.place_of_birth ? `\n📍 Place of Birth: ${consultation.place_of_birth}` : ''
+// const wpMsg = `🌟 New Consultation Booked!\n\n👤 Name: ${consultation.name}\n📞 Phone: ${consultation.phone}\n📧 Email: ${consultation.email}\n🎂 DOB: ${consultation.dob}\n🚻 Gender: ${consultation.gender}${tobLine}${pobLine}\n💰 Amount: ₹${consultation.amount}\n🆔 Booking ID: ${consultation.id}`
+// sendWhatsAppNotification(wpMsg) // fire-and-forget
 
     res.json({
       success: true,
