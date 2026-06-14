@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
+const pgSession = require("connect-pg-simple")(session);
+const { Pool } = require("pg");
 const path = require("path");
 require("dotenv").config();
 
@@ -57,19 +59,22 @@ app.use(express.urlencoded({ extended: true }));
 /* =========================
 SESSION CONFIG
 ========================= */
+const pgPool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+
 app.use(
-session({
-name: "accurate-astro.sid",
-secret: process.env.SESSION_SECRET || "dev-secret",
-resave: false,
-saveUninitialized: false,
-cookie: {
-httpOnly: true,
-secure: process.env.NODE_ENV === "production",
-sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-maxAge: 24 * 60 * 60 * 1000,
-},
-})
+  session({
+    store: new pgSession({ pool: pgPool, tableName: "user_sessions", createTableIfMissing: true }),
+    name: "accurate-astro.sid",
+    secret: process.env.SESSION_SECRET || "dev-secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  })
 );
 
 /* =========================
