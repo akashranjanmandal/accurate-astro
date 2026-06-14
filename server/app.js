@@ -32,6 +32,7 @@ app.use(
         "https://accurateastro.in",
         "https://www.accurateastro.in",
         "https://slategrey-cheetah-582252.hostingersite.com",
+        "https://red-porcupine-587301.hostingersite.com",
       ];
 
       // allow Vercel preview + prod domains
